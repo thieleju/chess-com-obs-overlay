@@ -1,7 +1,15 @@
-name: Manual Release
+name: Release
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
+    inputs:
+      manual:
+        description: "Manueller Release-Trigger (true/false)"
+        required: false
+        default: "false"
 
 permissions:
   contents: write
@@ -32,26 +40,10 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-      - name: Build minimal release
+      - name: Build minified release version
         run: pnpm run build:min
 
-      - name: Create GitHub release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: "release-${{ github.run_id }}"
-          release_name: "Release ${{ github.run_id }}"
-          draft: false
-          prerelease: false
-
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/wld.html
-          asset_name: wld.html
-          asset_content_type: text/html
+        run: pnpm dlx semantic-release
