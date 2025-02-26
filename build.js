@@ -1,10 +1,13 @@
-import fs from "fs"
-import path from "path"
+import fs from "node:fs"
+import path from "node:path"
 import esbuild from "esbuild"
 import { minify } from "html-minifier-terser"
 
+/**
+ * Build the JS bundle using esbuild.
+ * @returns {Promise<string>} The bundled JS code.
+ */
 async function buildBundle() {
-  // Bundle JS, but exclude external dependencies like Luxon
   const result = await esbuild.build({
     entryPoints: ["src/js/app.js"],
     bundle: true,
@@ -17,9 +20,12 @@ async function buildBundle() {
   return result.outputFiles[0].text
 }
 
+/**
+ * Build the final HTML file with the bundled JS code.
+ */
 async function buildHTML() {
   const templatePath = path.resolve("src/index.html")
-  let htmlContent = fs.readFileSync(templatePath, "utf-8")
+  let htmlContent = fs.readFileSync(templatePath, "utf8")
 
   // Build the bundled JS code
   const bundledJS = await buildBundle()
@@ -43,11 +49,12 @@ async function buildHTML() {
   // Output to the dist folder
   const distDir = path.resolve("dist")
   if (!fs.existsSync(distDir)) fs.mkdirSync(distDir)
-  fs.writeFileSync(path.join(distDir, "wld.html"), htmlContent, "utf-8")
+  fs.writeFileSync(path.join(distDir, "wld.html"), htmlContent, "utf8")
+
   console.log("✅ Built dist/wld.html")
 }
 
-buildHTML().catch((err) => {
-  console.error("Build error:", err)
+buildHTML().catch((error) => {
+  console.error("Build error:", error)
   process.exit(1)
 })

@@ -25,15 +25,15 @@ export default [
     ]
   },
   {
+    languageOptions: {
+      globals: {
+        requestAnimationFrame: "readonly"
+      }
+    },
     rules: {
       "no-unused-vars": "warn",
       "no-undef": "warn",
-      "no-console": [
-        "error",
-        {
-          allow: ["error", "warn"]
-        }
-      ],
+      "no-console": "off",
       "sonarjs/no-unused-collection": "off",
       "sonarjs/no-duplicate-string": ["warn", { threshold: 5 }],
       "unicorn/better-regex": "error",
@@ -68,11 +68,13 @@ export default [
       "unicorn/no-array-reduce": "off",
       "unicorn/prefer-query-selector": "off",
       "unicorn/prefer-add-event-listener": "warn",
-      "unicorn/prefer-top-level-await": "warn",
+      "unicorn/prefer-top-level-await": "off",
       "unicorn/prefer-structured-clone": "off",
       "unicorn/prefer-ternary": ["error", "only-single-line"],
       "unicorn/prefer-code-point": "off",
-      "sonarjs/todo-tag": "warn"
+      "sonarjs/todo-tag": "warn",
+      "unicorn/no-process-exit": "off",
+      "unicorn/no-invalid-remove-event-listener": "off"
     }
   }
 ]

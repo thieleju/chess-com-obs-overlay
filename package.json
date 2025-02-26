@@ -11,9 +11,11 @@
   "scripts": {
     "build": "node build.js",
     "build:min": "node build.js --minify",
-    "build:watch": "nodemon --watch src --ext js,html --exec \"node build.js\"",
+    "build:watch": "nodemon --verbose --watch src --ext js,html --exec \"node build.js\"",
     "test": "jest --coverage",
-    "dev": "concurrently \"npm run build:watch\" \"live-server dist\""
+    "dev": "concurrently \"npm run build:watch\" \"live-server dist\"",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "keywords": [],
   "author": "",
