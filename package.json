@@ -12,7 +12,7 @@
     "build": "node build.js",
     "build:min": "node build.js --minify",
     "build:watch": "nodemon --verbose --watch src --ext js,html --exec \"node build.js\"",
-    "test": "jest --coverage",
+    "test": "jest --verbose --silent=false",
     "dev": "concurrently \"npm run build:watch\" \"live-server dist\"",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"
@@ -40,6 +40,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "live-server": "^1.2.2",
     "luxon": "^3.5.0",
+    "node-fetch": "2.7.0",
     "nodemon": "^3.1.9"
   },
   "dependencies": {

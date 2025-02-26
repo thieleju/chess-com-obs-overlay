@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { mapResult, getScore } from "../src/js/game.js"
+import { mapResult, getScore } from "../src/js/app.js"
 
 describe("mapResult", () => {
   test("returns 1 for 'win'", () => {
