@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.0.0...v1.0.1) (2025-02-26)
+
+
+### Bug Fixes
+
+* Fix asset label for html file in release configuration ([f1e579f](https://github.com/thieleju/chess-com-obs-overlay/commit/f1e579f17ba32ebcddcc5c6a45e4cb46b4e67142))
+
 # 1.0.0 (2025-02-26)
 
 
