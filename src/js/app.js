@@ -18,7 +18,7 @@ let elements = getDomElements()
 /**
  * Update the UI with the latest stats
  */
-async function updateUI() {
+export async function updateUI() {
   try {
     const games = await fetchGames(state.username)
     const score = getScore(games, state, processedGameUUIDs, scriptStartTime)
@@ -54,7 +54,7 @@ async function updateUI() {
 /**
  * Initialize by fetching the current ratings and updating the UI
  */
-async function init() {
+export async function init() {
   try {
     const allCurrentRatings = await fetchAllCurrentRatings(state.username)
 
@@ -75,7 +75,7 @@ async function init() {
 /**
  * Start the interval to update the UI
  */
-function startInterval() {
+export function startInterval() {
   interval = setInterval(async () => {
     // Skip iteration if username is not set
     if (!state.username) return
@@ -95,7 +95,7 @@ function startInterval() {
 /**
  * Start the app
  */
-async function start() {
+export async function start() {
   await init()
 
   // Event listeners
@@ -135,7 +135,7 @@ export function mapResult(result) {
  * @param {number} scriptStartTime - The start time of the script
  * @returns {object} The updated score
  */
-function getScore(games, state, processedGameUUIDs, scriptStartTime) {
+export function getScore(games, state, processedGameUUIDs, scriptStartTime) {
   // Create a copy of the current score
   const newScore = state.modes[state.gameMode].score
   if (!games || games.length === 0) return newScore
@@ -185,7 +185,7 @@ function getScore(games, state, processedGameUUIDs, scriptStartTime) {
  * Switch edit mode
  * @param {boolean} newMode - The new edit mode
  */
-function switchEditMode(newMode) {
+export function switchEditMode(newMode) {
   state.editMode = newMode
   elements.editMode.style.display = state.editMode ? "block" : "none"
 }
@@ -194,7 +194,7 @@ function switchEditMode(newMode) {
  * Show a success message
  * @param {string} message - The message to show
  */
-function showSuccessMessage(message) {
+export function showSuccessMessage(message) {
   elements.successMessage.innerHTML = message
   setTimeout(() => {
     elements.successMessage.innerHTML = ""
@@ -204,7 +204,7 @@ function showSuccessMessage(message) {
 /**
  * Reset all stats
  */
-function resetAllStats() {
+export function resetAllStats() {
   switchEditMode(false)
 
   elements.errorMessage.innerHTML = ""
@@ -226,7 +226,7 @@ function resetAllStats() {
  * Handle fetch errors
  * @param {Error} err - The error to handle
  */
-function handleFetchError(err) {
+export function handleFetchError(err) {
   if (err.name === "AbortError") {
     console.error("Fetch timeout:", err)
   } else if (err.message.includes("HTTP Error: 404")) {
@@ -242,7 +242,7 @@ function handleFetchError(err) {
 /**
  * Handle reset button click
  */
-async function handleResetClick() {
+export async function handleResetClick() {
   console.log("Resetting stats")
 
   showSuccessMessage("Resetting stats...")
@@ -261,7 +261,7 @@ async function handleResetClick() {
  * Handle game mode change
  * @param {string} mode - The new game mode
  */
-function handleGameModeChange(mode) {
+export function handleGameModeChange(mode) {
   console.log("Setting game mode to", mode)
 
   state.gameMode = mode
@@ -279,7 +279,7 @@ function handleGameModeChange(mode) {
 /**
  * Handle username change
  */
-function handleUsernameChange() {
+export function handleUsernameChange() {
   console.log("Setting username to", elements.usernameInput.value)
 
   // Keep the current game mode and reset the rest
