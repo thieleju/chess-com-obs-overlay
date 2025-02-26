@@ -2,23 +2,6 @@
 
 export default {
   branches: ["main"],
-  analyzeCommits: async (context) => {
-    const commits = context.commits
-    const lastCommit = commits.at(-1)
-
-    if (!lastCommit) {
-      context.logger.log("No commits found. No release will be created.")
-      return null
-    }
-    if (!lastCommit.message.includes("#release")) {
-      context.logger.log(
-        "The trigger commit does not contain '#release'. No release will be created."
-      )
-      return null
-    }
-
-    return context.analyzeCommits()
-  },
   plugins: [
     [
       "@semantic-release/commit-analyzer",
