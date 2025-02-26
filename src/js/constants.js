@@ -4,9 +4,8 @@ export const COLOR_WHITE = "#ffffff"
 export const ANIMATION_DURATION = 700
 export const CHESS_COM_TIMEZONE = "America/Los_Angeles"
 export const CHESS_API_URL = "https://api.chess.com/pub/player"
-// A shortened User-Agent – update if necessary
-export const USER_AGENT =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ..."
+export const REPO_URL = "https://github.com/thieleju/chess-com-obs-overlay"
+export const REPO_MAINTAINER = "thieleju"
 export const INTERVAL_MS = 6000
 export const FETCH_HARD_TIMEOUT = 3000
 export const STATE_DEFAULT = {

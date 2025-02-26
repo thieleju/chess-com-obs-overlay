@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { mapResult, getScore } from "../src/js/game.js"
 
 describe("mapResult", () => {
