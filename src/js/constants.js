@@ -7,7 +7,7 @@ export const CHESS_API_URL = "https://api.chess.com/pub/player"
 export const REPO_URL = "https://github.com/thieleju/chess-com-obs-overlay"
 export const REPO_MAINTAINER = "thieleju"
 export const INTERVAL_MS = 6000
-export const FETCH_HARD_TIMEOUT = 3000
+export const FETCH_HARD_TIMEOUT = INTERVAL_MS - 100 // All games of a month are fetched at once, this can lead to the request timing out
 export const STATE_DEFAULT = {
   username: "",
   gameMode: "rapid",
