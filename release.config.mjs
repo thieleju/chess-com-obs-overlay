@@ -27,7 +27,12 @@ export default {
     [
       "@semantic-release/github",
       {
-        assets: [{ path: "dist/wld.html", label: "WLD HTML File" }]
+        assets: [
+          {
+            path: "dist/wld.html",
+            label: "chess-com-obs-overlay.html (Download this)"
+          }
+        ]
       }
     ]
   ]
