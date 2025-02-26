@@ -6,7 +6,7 @@ export default {
     [
       "@semantic-release/commit-analyzer",
       {
-        preset: "angular" // Nutzt das Angular-Commit-Format als Standard
+        preset: "angular"
       }
     ],
     "@semantic-release/release-notes-generator",
