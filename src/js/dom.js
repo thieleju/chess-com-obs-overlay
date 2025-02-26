@@ -20,6 +20,8 @@ export function getDomElements() {
     errorMessage: document.getElementById("errorMessage"),
     successMessage: document.getElementById("successMessage"),
     usernameInput: document.getElementById("usernameInput"),
+    toggleElo: document.getElementById("toggleElo"),
+    eloDiffContainer: document.getElementById("eloDiffContainer"),
     modes: {
       rapid: document.getElementById("rapid"),
       blitz: document.getElementById("blitz"),
