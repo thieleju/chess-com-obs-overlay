@@ -153,11 +153,7 @@ function resetAllStats() {
   scriptStartTime = Math.floor(Date.now() / 1000)
   processedGameUUIDs.clear()
 
-  for (const mode of Object.keys(elements.modes)) {
-    elements.modes[mode].classList.remove("active")
-  }
-
-  elements.modes[state.gameMode].classList.add("active")
+  setGameModeButtonActive(elements, state.gameMode)
 }
 
 /**
@@ -209,12 +205,7 @@ function handleGameModeChange(mode) {
 
   const score = state.modes[state.gameMode].score
   updateWld(score.wins, score.losses, score.draws, elements)
-
-  for (const m of Object.keys(elements.modes)) {
-    elements.modes[m].classList.remove("active")
-  }
-
-  elements.modes[mode].classList.add("active")
+  setGameModeButtonActive(elements, mode)
 
   showSuccessMessage(`Switched to ${mode} mode`)
 }
@@ -247,10 +238,6 @@ globalThis.addEventListener("error", async (event) => {
   await new Promise((resolve) => setTimeout(resolve, 5000))
 
   elements.reset.disabled = false
-
-  for (const mode of Object.keys(elements.modes)) {
-    elements.modes[mode].removeEventListener("click", () => {})
-  }
 
   if (interval) clearInterval(interval)
   resetAllStats()
