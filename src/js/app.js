@@ -106,6 +106,9 @@ export async function start() {
   elements.global.addEventListener("click", () =>
     switchEditMode(!state.editMode)
   )
+  elements.toggleElo.addEventListener("click", (event) => {
+    switchShowEloDiff(event)
+  })
   for (const mode of Object.keys(elements.modes)) {
     elements.modes[mode].addEventListener("click", () => {
       handleGameModeChange(mode)
@@ -179,6 +182,16 @@ export function getScore(games, state, processedGameUUIDs, scriptStartTime) {
     processedGameUUIDs.add(game.uuid)
   }
   return newScore
+}
+
+/**
+ * Switch show Elo difference
+ * @param {Event} event - The event
+ */
+export function switchShowEloDiff(event) {
+  const isChecked = event.target.checked
+  state.showEloDiff = isChecked
+  elements.eloDiffContainer.style.display = isChecked ? "block" : "none"
 }
 
 /**

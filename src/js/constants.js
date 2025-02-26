@@ -11,6 +11,7 @@ export const FETCH_HARD_TIMEOUT = 3000
 export const STATE_DEFAULT = {
   username: "",
   gameMode: "rapid",
+  showEloDiff: true,
   editMode: false,
   modes: {
     rapid: {
