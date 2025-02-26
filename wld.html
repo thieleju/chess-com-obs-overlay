@@ -315,7 +315,7 @@
         elements.draws.innerHTML = draws
       }
 
-      function switchEditModeTo(newMode) {
+      function switchEditMode(newMode) {
         state.editMode = newMode
         elements.editMode.style.display = state.editMode ? "block" : "none"
       }
@@ -399,7 +399,7 @@
             console.log("Set game mode to", mode, state.modes[mode])
 
             state.gameMode = mode
-            switchEditModeTo(false)
+            switchEditMode(false)
 
             // Update rating diff and WLD immediately on mode change
             setRatingDiff(state.modes[state.gameMode].lastRatingDiff)
@@ -435,7 +435,7 @@
 
         // Global event listener for switching edit mode
         elements.global.addEventListener("click", () =>
-          switchEditModeTo(!state.editMode)
+          switchEditMode(!state.editMode)
         )
 
         // Start the update interval
@@ -450,7 +450,7 @@
       }
 
       function resetAllStats() {
-        switchEditModeTo(false)
+        switchEditMode(false)
 
         // Reset the state
         state = JSON.parse(JSON.stringify(STATE_DEFAULT))
