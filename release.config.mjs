@@ -2,13 +2,10 @@
 
 export default {
   branches: ["main"],
-  // Override the analyzeCommits function to only perform a release calculation if the last commit in the list contains the marker "#release".
-  analyzeCommits: async (commits, context) => {
-    const { default: conventionalAnalyzer } = await import(
-      "@semantic-release/commit-analyzer/lib/analyze-commits"
-    )
-
+  analyzeCommits: async (context) => {
+    const commits = context.commits
     const lastCommit = commits.at(-1)
+
     if (!lastCommit) {
       context.logger.log("No commits found. No release will be created.")
       return null
@@ -19,10 +16,16 @@ export default {
       )
       return null
     }
-    return conventionalAnalyzer(commits, context)
+
+    return context.analyzeCommits()
   },
   plugins: [
-    "@semantic-release/commit-analyzer",
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        preset: "angular" // Nutzt das Angular-Commit-Format als Standard
+      }
+    ],
     "@semantic-release/release-notes-generator",
     [
       "@semantic-release/changelog",
