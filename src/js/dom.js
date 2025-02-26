@@ -1,5 +1,9 @@
 import { COLOR_GREEN, COLOR_RED, COLOR_WHITE } from "./constants.js"
 
+/**
+ * Get the DOM elements
+ * @returns {object} The DOM elements
+ */
 export function getDomElements() {
   return {
     wld: document.getElementById("wld"),
@@ -19,10 +23,22 @@ export function getDomElements() {
   }
 }
 
+/**
+ * Update the rating
+ * @param {number} wins - The number of wins
+ * @param {number} losses - The number of losses
+ * @param {number} draws - The number of draws
+ * @param {object} domElements - The DOM elements
+ */
 export function updateWld(wins, losses, draws, domElements) {
   domElements.wld.innerHTML = `${wins} / ${losses} / ${draws}`
 }
 
+/**
+ * Update the rating difference
+ * @param {number} ratingDiff - The rating difference
+ * @param {object} domElements - The DOM elements
+ */
 export function updateRatingDiff(ratingDiff, domElements) {
   if (ratingDiff === 0) {
     domElements.ratingDiff.innerHTML = `+${ratingDiff}`
@@ -34,4 +50,16 @@ export function updateRatingDiff(ratingDiff, domElements) {
     domElements.ratingDiff.innerHTML = `${ratingDiff}`
     domElements.ratingDiff.style.color = COLOR_RED
   }
+}
+
+/**
+ * Set active state of the game mode buttons, the active mode is highlighted
+ * @param {object} domElements - The DOM elements
+ * @param {string} mode - The game mode
+ */
+export function setGameModeButtonActive(domElements, mode) {
+  for (const mode of Object.keys(domElements.modes)) {
+    domElements.modes[mode].classList.remove("active")
+  }
+  domElements.modes[mode].classList.add("active")
 }
