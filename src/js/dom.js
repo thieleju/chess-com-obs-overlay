@@ -1,4 +1,9 @@
-import { COLOR_GREEN, COLOR_RED, COLOR_WHITE } from "./constants.js"
+import {
+  COLOR_GREEN,
+  COLOR_RED,
+  COLOR_WHITE,
+  ANIMATION_DURATION
+} from "./constants.js"
 
 /**
  * Get the DOM elements
@@ -62,4 +67,27 @@ export function setGameModeButtonActive(domElements, mode) {
     domElements.modes[mode].classList.remove("active")
   }
   domElements.modes[mode].classList.add("active")
+}
+
+/**
+ * Animate the difference in Elo ratings
+ * @param {number} newEloDiff - The new Elo difference
+ * @param {number} lastRatingDiff - The last rating difference
+ * @param {object} elements - The DOM elements
+ * @param {Function} callback - The callback function to update the rating difference
+ */
+export function animateEloDiff(newEloDiff, lastRatingDiff, elements, callback) {
+  const start = performance.now()
+  const initialDiff = lastRatingDiff
+
+  requestAnimationFrame(function animate(time) {
+    const timeFraction = Math.min((time - start) / ANIMATION_DURATION, 1)
+    const ratingDiff = Math.floor(
+      initialDiff + timeFraction * (newEloDiff - initialDiff)
+    )
+
+    callback(ratingDiff, elements)
+
+    if (timeFraction < 1) requestAnimationFrame(animate)
+  })
 }
