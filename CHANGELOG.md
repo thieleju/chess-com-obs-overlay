@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.0.1...v1.1.0) (2025-02-27)
+
+
+### Bug Fixes
+
+* Remove tests from workflow ([7eb6ce3](https://github.com/thieleju/chess-com-obs-overlay/commit/7eb6ce3f4b6ee85229cd126e94a51b561304a406))
+
+
+### Features
+
+* Add settings and refactor app.js ([002e912](https://github.com/thieleju/chess-com-obs-overlay/commit/002e9120ae497133501d31ad414abe56e52fea9f))
+
 ## [1.0.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.0.0...v1.0.1) (2025-02-26)
 
 
