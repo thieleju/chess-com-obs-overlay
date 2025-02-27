@@ -13,6 +13,8 @@ export const STATE_DEFAULT = {
   gameMode: "rapid",
   showEloDiff: true,
   editMode: false,
+  scriptStartTime: Math.floor(Date.now() / 1000),
+  processedGameUUIDs: new Set(),
   modes: {
     rapid: {
       score: { wins: 0, losses: 0, draws: 0 },

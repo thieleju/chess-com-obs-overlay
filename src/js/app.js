@@ -2,15 +2,18 @@ import { STATE_DEFAULT, INTERVAL_MS } from "./constants.js"
 import { fetchGames, fetchAllCurrentRatings } from "./api.js"
 import {
   getDomElements,
-  updateWld,
-  updateRatingDiff,
   setGameModeButtonActive,
+  setWld,
+  setRatingDiff,
+  setEditMode,
+  setShowRatingDiff,
+  showSuccessMessage,
+  showErrorMessage,
+  setUserNameInput,
   animateEloDiff
 } from "./dom.js"
 
 let state = JSON.parse(JSON.stringify(STATE_DEFAULT))
-const processedGameUUIDs = new Set()
-let scriptStartTime = Math.floor(Date.now() / 1000)
 let interval = null
 let isRunning = false
 let elements = getDomElements()
@@ -18,12 +21,12 @@ let elements = getDomElements()
 /**
  * Update the UI with the latest stats
  */
-export async function updateUI() {
+export async function updateUi() {
   try {
     const games = await fetchGames(state.username)
-    const score = getScore(games, state, processedGameUUIDs, scriptStartTime)
+    const score = getScore(games)
 
-    updateWld(score.wins, score.losses, score.draws, elements)
+    setWld(elements, score.wins, score.losses, score.draws)
 
     const allCurrentRatings = await fetchAllCurrentRatings(state.username)
     if (!allCurrentRatings) return
@@ -40,14 +43,16 @@ export async function updateUI() {
       return
 
     animateEloDiff(
+      elements,
       ratingDiff,
       state.modes[state.gameMode].lastRatingDiff,
-      elements,
-      updateRatingDiff
+      setRatingDiff
     )
     state.modes[state.gameMode].lastRatingDiff = ratingDiff
+
+    saveStateToLocalStorage(state)
   } catch (error) {
-    handleFetchError(error)
+    handleError(error)
   }
 }
 
@@ -56,19 +61,39 @@ export async function updateUI() {
  */
 export async function init() {
   try {
-    const allCurrentRatings = await fetchAllCurrentRatings(state.username)
+    showSuccessMessage(elements, "Initializing...")
 
-    // Set the initial rating for each mode
+    // Read state from local storage and initialize or use default state
+    state = readStateFromLocalStorage() || STATE_DEFAULT
+    state.processedGameUUIDs = new Set()
+    state.editMode = false
+    state.scriptStartTime = Math.floor(Date.now() / 1000)
+    const mode = state.modes[state.gameMode]
+
+    setUserNameInput(elements, state.username)
+    setShowRatingDiff(elements, state.showEloDiff)
+    setEditMode(elements, false)
+    setWld(elements, mode.score.wins, mode.score.losses, mode.score.draws)
+    setRatingDiff(elements, mode.lastRatingDiff ?? 0)
+    setGameModeButtonActive(elements, state.gameMode)
+
+    const allCurrentRatings = await fetchAllCurrentRatings(state.username)
     for (const mode in state.modes) {
+      // Only set initial rating if it is undefined, otherwise use from saved settings
+      if (state.modes[mode].initialRating) continue
+
       state.modes[mode].initialRating = allCurrentRatings
         ? allCurrentRatings[mode]
         : null
     }
-    await updateUI()
-    elements.errorMessage.innerHTML = ""
-    console.log("Initialized State", state)
+
+    await updateUi()
+
+    showErrorMessage(elements, "")
+
+    console.log("Initialized State")
   } catch (error) {
-    handleFetchError(error)
+    handleError(error)
   }
 }
 
@@ -85,7 +110,7 @@ export function startInterval() {
 
     isRunning = true
     try {
-      await updateUI()
+      await updateUi()
     } finally {
       isRunning = false
     }
@@ -98,23 +123,87 @@ export function startInterval() {
 export async function start() {
   await init()
 
-  // Event listeners
-  elements.reset.addEventListener("click", async () => handleResetClick())
-  elements.usernameInput.addEventListener("change", () =>
-    handleUsernameChange()
-  )
-  elements.global.addEventListener("click", () =>
-    switchEditMode(!state.editMode)
-  )
-  elements.toggleElo.addEventListener("click", (event) => {
-    switchShowEloDiff(event)
+  // ###### On username input change ######
+  elements.usernameInput.addEventListener("change", (event) => {
+    showSuccessMessage(
+      elements,
+      `Set username to ${elements.usernameInput.value}`
+    )
+
+    // Reset rating diff and wld
+    for (const mode in state.modes) {
+      state.modes[mode].lastRatingDiff = 0
+      state.modes[mode].initialRating = null
+      state.modes[mode].score = { wins: 0, losses: 0, draws: 0 }
+    }
+    state.processedGameUUIDs = new Set()
+    state.username = elements.usernameInput.value
+    setUserNameInput(elements, event.target.value)
+
+    saveStateToLocalStorage(state)
+
+    init()
   })
+
+  // ###### Click reset all button ######
+  elements.reset.addEventListener("click", async () => {
+    showSuccessMessage(elements, "Resetting stats...")
+
+    // Disable reset button while reinitialization is running (to prevent double clicks)
+    elements.reset.disabled = true
+    resetState()
+
+    // Reinitialize the app
+    await init()
+
+    state.editMode = false
+    setEditMode(elements, false)
+
+    elements.reset.disabled = false
+
+    saveStateToLocalStorage(state)
+  })
+
+  // ###### Click show elo button ######
+  elements.toggleElo.addEventListener("click", (event) => {
+    state.showEloDiff = event.target.checked
+    setShowRatingDiff(elements, state.showEloDiff)
+
+    saveStateToLocalStorage(state)
+  })
+
+  // ###### Click one of modes buttons ######
   for (const mode of Object.keys(elements.modes)) {
     elements.modes[mode].addEventListener("click", () => {
-      handleGameModeChange(mode)
+      showSuccessMessage(elements, `Switched to ${mode} mode`)
+
+      state.gameMode = mode
+
+      const modeObj = state.modes[mode]
+      setGameModeButtonActive(elements, mode)
+      setRatingDiff(elements, modeObj.lastRatingDiff)
+      setWld(
+        elements,
+        modeObj.score.wins,
+        modeObj.score.losses,
+        modeObj.score.draws
+      )
+
+      saveStateToLocalStorage(state)
     })
   }
 
+  // ###### Click body element, switching edit mode ######
+  elements.body.addEventListener("click", () => {
+    // skip if text input is clicked
+    if (document.activeElement === elements.usernameInput) return
+
+    const newMode = !state.editMode
+    state.editMode = newMode
+    setEditMode(elements, newMode)
+  })
+
+  // ###### Start main loop ######
   startInterval()
 }
 
@@ -124,7 +213,7 @@ export async function start() {
  * @returns {number} The score value for the result
  */
 export function mapResult(result) {
-  if (!result) return 0
+  if (!result) throw new Error("Invalid result: " + result)
   if (result === "win") return 1
   if (result === "draw") return 0.5
   return 0
@@ -133,12 +222,9 @@ export function mapResult(result) {
 /**
  * Calculate the score based on the games
  * @param {object[]} games - The games to calculate the score from
- * @param {object} state - The current state
- * @param {Set} processedGameUUIDs - The set of processed game UUIDs
- * @param {number} scriptStartTime - The start time of the script
  * @returns {object} The updated score
  */
-export function getScore(games, state, processedGameUUIDs, scriptStartTime) {
+export function getScore(games) {
   // Create a copy of the current score
   const newScore = state.modes[state.gameMode].score
   if (!games || games.length === 0) return newScore
@@ -146,9 +232,9 @@ export function getScore(games, state, processedGameUUIDs, scriptStartTime) {
   // Only consider games that ended after the start time and match the current mode, and skip already processed games
   const gamesToCheck = games.filter(
     (game) =>
-      game.end_time > scriptStartTime &&
+      game.end_time > state.scriptStartTime &&
       game.time_class === state.gameMode &&
-      !processedGameUUIDs.has(game.uuid)
+      !state.processedGameUUIDs.has(game.uuid)
   )
 
   for (const game of gamesToCheck) {
@@ -179,149 +265,89 @@ export function getScore(games, state, processedGameUUIDs, scriptStartTime) {
       }
     }
     // Mark the game as processed
-    processedGameUUIDs.add(game.uuid)
+    state.processedGameUUIDs.add(game.uuid)
   }
   return newScore
 }
 
 /**
- * Switch show Elo difference
- * @param {Event} event - The event
+ * Reset the state to the default state and ui elements
  */
-export function switchShowEloDiff(event) {
-  const isChecked = event.target.checked
-  state.showEloDiff = isChecked
-  elements.eloDiffContainer.style.display = isChecked ? "block" : "none"
-}
-
-/**
- * Switch edit mode
- * @param {boolean} newMode - The new edit mode
- */
-export function switchEditMode(newMode) {
-  state.editMode = newMode
-  elements.editMode.style.display = state.editMode ? "block" : "none"
-}
-
-/**
- * Show a success message
- * @param {string} message - The message to show
- */
-export function showSuccessMessage(message) {
-  elements.successMessage.innerHTML = message
-  setTimeout(() => {
-    elements.successMessage.innerHTML = ""
-  }, 1000)
-}
-
-/**
- * Reset all stats
- */
-export function resetAllStats() {
-  switchEditMode(false)
-
-  elements.errorMessage.innerHTML = ""
-  elements.successMessage.innerHTML = ""
+export function resetState() {
+  console.log("Resetting state...")
 
   state = JSON.parse(JSON.stringify(STATE_DEFAULT))
+  state.processedGameUUIDs = new Set()
+  state.scriptStartTime = Math.floor(Date.now() / 1000)
+  state.username = elements.usernameInput.value
+
+  saveStateToLocalStorage(state)
+
+  // reset ui elements
   elements = getDomElements()
-
-  updateWld(0, 0, 0, elements)
-  updateRatingDiff(0, elements)
-
-  scriptStartTime = Math.floor(Date.now() / 1000)
-  processedGameUUIDs.clear()
-
+  setUserNameInput(elements, state.username)
+  setShowRatingDiff(elements, state.showEloDiff)
+  setEditMode(elements, state.editMode)
+  setWld(elements, 0, 0, 0)
+  setRatingDiff(elements, 0)
   setGameModeButtonActive(elements, state.gameMode)
 }
 
 /**
- * Handle fetch errors
+ * Handle fetch errors and throw others to global error handler
  * @param {Error} err - The error to handle
  */
-export function handleFetchError(err) {
+export function handleError(err) {
   if (err.name === "AbortError") {
     console.error("Fetch timeout:", err)
   } else if (err.message.includes("HTTP Error: 404")) {
-    elements.errorMessage.innerHTML =
+    showErrorMessage(
+      elements,
       state.username === ""
         ? "Enter your chess.com username"
         : `User '${state.username}' not found`
+    )
   } else {
     throw err
   }
 }
 
 /**
- * Handle reset button click
+ * Save the state to local storage.
+ * @param {object} state - The state
  */
-export async function handleResetClick() {
-  console.log("Resetting stats")
-
-  showSuccessMessage("Resetting stats...")
-
-  // Disable reset button while reinitialization is running (to prevent double clicks)
-  elements.reset.disabled = true
-
-  resetAllStats()
-  state.username = elements.usernameInput.value
-
-  await init()
-  elements.reset.disabled = false
+export function saveStateToLocalStorage(state) {
+  console.log("Saving state to local storage")
+  localStorage.setItem("state", JSON.stringify(state))
 }
 
 /**
- * Handle game mode change
- * @param {string} mode - The new game mode
+ * Read the state from local storage.
+ * @returns {object} The state
  */
-export function handleGameModeChange(mode) {
-  console.log("Setting game mode to", mode)
-
-  state.gameMode = mode
-
-  switchEditMode(false)
-  updateRatingDiff(state.modes[state.gameMode].lastRatingDiff, elements)
-
-  const score = state.modes[state.gameMode].score
-  updateWld(score.wins, score.losses, score.draws, elements)
-  setGameModeButtonActive(elements, mode)
-
-  showSuccessMessage(`Switched to ${mode} mode`)
-}
-
-/**
- * Handle username change
- */
-export function handleUsernameChange() {
-  console.log("Setting username to", elements.usernameInput.value)
-
-  // Keep the current game mode and reset the rest
-  const tempGameMode = state.gameMode
-  resetAllStats()
-  state.gameMode = tempGameMode
-  setGameModeButtonActive(elements, state.gameMode)
-
-  state.username = elements.usernameInput.value
-  showSuccessMessage(`Set username to ${state.username}`)
-
-  init()
+export function readStateFromLocalStorage() {
+  try {
+    const s = JSON.parse(localStorage.getItem("state"))
+    console.log("Read state from local storage")
+    return s
+  } catch {
+    return STATE_DEFAULT
+  }
 }
 
 // Global error handling
 globalThis.addEventListener("error", async (event) => {
   console.error("Unhandled error:", event.error || event.reason || event)
 
-  elements.errorMessage.innerHTML =
-    "Something bad happened, retrying after 5s..."
+  showErrorMessage(elements, "Something bad happened, retrying after 5s...")
 
   await new Promise((resolve) => setTimeout(resolve, 5000))
 
   elements.reset.disabled = false
 
   if (interval) clearInterval(interval)
-  resetAllStats()
 
-  state.username = elements.usernameInput.value
+  resetState()
 
   await start()
 })
