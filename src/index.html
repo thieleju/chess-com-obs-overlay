@@ -84,6 +84,23 @@
           placeholder="Enter your chess.com username"
         />
       </div>
+      <!-- Show reset on restart toggle -->
+      <div class="form-check mt-2 d-flex align-items-center" style="gap: 6px">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="toggleResetOnRestart"
+          style="transform: scale(1.2); margin-top: 1px"
+          checked
+        />
+        <label
+          class="form-check-label"
+          for="toggleResetOnRestart"
+          style="margin-bottom: 0"
+        >
+          Reset W/L/D on Restart
+        </label>
+      </div>
       <!-- Show elo toggle -->
       <div class="form-check mt-2 d-flex align-items-center" style="gap: 6px">
         <input
@@ -99,23 +116,6 @@
           style="margin-bottom: 0"
         >
           Show Elo ±
-        </label>
-      </div>
-      <!-- Show reset on restart toggle -->
-      <div class="form-check mt-2 d-flex align-items-center" style="gap: 6px">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="toggleResetOnRestart"
-          style="transform: scale(1.2); margin-top: 1px"
-          checked
-        />
-        <label
-          class="form-check-label"
-          for="toggleResetOnRestart"
-          style="margin-bottom: 0"
-        >
-          Reset on Restart
         </label>
       </div>
     </div>
