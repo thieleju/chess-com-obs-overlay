@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.1.0...v1.2.0) (2025-03-01)
+
+
+### Bug Fixes
+
+* Change usernames in urls to lowercase to prevent 301 ([a2c592f](https://github.com/thieleju/chess-com-obs-overlay/commit/a2c592facee38d7d8780ba390b64c16c331ca57a))
+
+
+### Features
+
+* Add reset on restart checkbox ([3762fd7](https://github.com/thieleju/chess-com-obs-overlay/commit/3762fd7949c1b2d721215b820c819037a0f2113f))
+
 # [1.1.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.0.1...v1.1.0) (2025-02-27)
 
 
