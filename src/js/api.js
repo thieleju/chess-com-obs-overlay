@@ -45,7 +45,7 @@ export async function fetchData(url, username) {
  * @returns {Promise<object>} The current ratings
  */
 export async function fetchAllCurrentRatings(username) {
-  const url = `${CHESS_API_URL}/${username}/stats`
+  const url = `${CHESS_API_URL}/${username?.toLowerCase()}/stats`
   const data = await fetchData(url, username)
   if (!data) return null
   return {
@@ -63,7 +63,7 @@ export async function fetchAllCurrentRatings(username) {
 export function getGamesUrl(username) {
   const date = DateTime.local().setZone(CHESS_COM_TIMEZONE)
   const month = date.month.toString().padStart(2, "0")
-  return `${CHESS_API_URL}/${username}/games/${date.year}/${month}`
+  return `${CHESS_API_URL}/${username?.toLowerCase()}/games/${date.year}/${month}`
 }
 
 /**
