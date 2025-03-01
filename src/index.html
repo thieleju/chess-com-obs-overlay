@@ -31,7 +31,7 @@
         font-size: 50px;
       }
       .form-control {
-        width: 300px;
+        width: 316px;
       }
       .errorMessage {
         font-size: 10px;
@@ -72,13 +72,13 @@
       <button id="blitz" class="btn btn-primary" type="button">Blitz</button>
       <button id="bullet" class="btn btn-primary" type="button">Bullet</button>
       <button id="reset" class="btn btn-secondary" type="button">
-        Reset All
+        Reset Stats
       </button>
       <!-- Username input -->
       <div class="mt-1">
         <input
           type="text"
-          class="form-control"
+          class="form-control w-300"
           id="usernameInput"
           value=""
           placeholder="Enter your chess.com username"
@@ -99,6 +99,23 @@
           style="margin-bottom: 0"
         >
           Show Elo ±
+        </label>
+      </div>
+      <!-- Show reset on restart toggle -->
+      <div class="form-check mt-2 d-flex align-items-center" style="gap: 6px">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="toggleResetOnRestart"
+          style="transform: scale(1.2); margin-top: 1px"
+          checked
+        />
+        <label
+          class="form-check-label"
+          for="toggleResetOnRestart"
+          style="margin-bottom: 0"
+        >
+          Reset on Restart
         </label>
       </div>
     </div>

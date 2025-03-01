@@ -7,6 +7,7 @@ import {
   setRatingDiff,
   setEditMode,
   setShowRatingDiff,
+  setResetOnRestart,
   showSuccessMessage,
   showErrorMessage,
   setUserNameInput,
@@ -70,17 +71,26 @@ export async function init() {
     state.scriptStartTime = Math.floor(Date.now() / 1000)
     const mode = state.modes[state.gameMode]
 
+    // Reset stats of all modes if reset on restart is enabled
+    if (state.resetOnRestart) {
+      for (const mode in state.modes) {
+        state.modes[mode].lastRatingDiff = 0
+        state.modes[mode].score = { wins: 0, losses: 0, draws: 0 }
+      }
+    }
+
     setUserNameInput(elements, state.username)
     setShowRatingDiff(elements, state.showEloDiff)
     setEditMode(elements, false)
+    setGameModeButtonActive(elements, state.gameMode)
     setWld(elements, mode.score.wins, mode.score.losses, mode.score.draws)
     setRatingDiff(elements, mode.lastRatingDiff ?? 0)
-    setGameModeButtonActive(elements, state.gameMode)
+    setResetOnRestart(elements, state.resetOnRestart)
 
     const allCurrentRatings = await fetchAllCurrentRatings(state.username)
     for (const mode in state.modes) {
-      // Only set initial rating if it is undefined, otherwise use from saved settings
-      if (state.modes[mode].initialRating) continue
+      // Only set initial rating if it is undefined, or reset on restart is enabled
+      if (state.modes[mode].initialRating && !state.resetOnRestart) continue
 
       state.modes[mode].initialRating = allCurrentRatings
         ? allCurrentRatings[mode]
@@ -168,6 +178,14 @@ export async function start() {
   elements.toggleElo.addEventListener("click", (event) => {
     state.showEloDiff = event.target.checked
     setShowRatingDiff(elements, state.showEloDiff)
+
+    saveStateToLocalStorage(state)
+  })
+
+  // ###### Click reset on restart button ######
+  elements.toggleResetOnRestart.addEventListener("click", (event) => {
+    state.resetOnRestart = event.target.checked
+    setResetOnRestart(elements, state.resetOnRestart)
 
     saveStateToLocalStorage(state)
   })
@@ -291,6 +309,7 @@ export function resetState() {
   setWld(elements, 0, 0, 0)
   setRatingDiff(elements, 0)
   setGameModeButtonActive(elements, state.gameMode)
+  setResetOnRestart(elements, state.resetOnRestart)
 }
 
 /**

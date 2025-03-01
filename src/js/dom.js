@@ -22,6 +22,7 @@ export function getDomElements() {
     usernameInput: document.getElementById("usernameInput"),
     toggleElo: document.getElementById("toggleElo"),
     eloDiffContainer: document.getElementById("eloDiffContainer"),
+    toggleResetOnRestart: document.getElementById("toggleResetOnRestart"),
     modes: {
       rapid: document.getElementById("rapid"),
       blitz: document.getElementById("blitz"),
@@ -79,6 +80,15 @@ export function setGameModeButtonActive(domElements, mode) {
 export function setShowRatingDiff(domElements, showEloDiff) {
   domElements.toggleElo.checked = showEloDiff
   domElements.eloDiffContainer.style.display = showEloDiff ? "block" : "none"
+}
+
+/**
+ * Set the reset on restart option
+ * @param {object} domElements - The DOM elements
+ * @param {boolean} resetOnRestart - The reset on restart option
+ */
+export function setResetOnRestart(domElements, resetOnRestart) {
+  domElements.toggleResetOnRestart.checked = resetOnRestart
 }
 
 /**
