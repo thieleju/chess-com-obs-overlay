@@ -48,11 +48,5 @@
     "node-fetch": "2.7.0",
     "nodemon": "^3.1.9",
     "semantic-release": "^24.2.3"
-  },
-  "dependencies": {
-    "express": "^4.21.2",
-    "express-rate-limit": "^7.5.0",
-    "helmet": "^8.0.0",
-    "morgan": "^1.10.0"
   }
 }
