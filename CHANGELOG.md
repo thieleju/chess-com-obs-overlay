@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.2.0...v1.2.1) (2025-03-02)
+
+
+### Bug Fixes
+
+* Fix reset stats issue when reset on restart is disabled ([21aa554](https://github.com/thieleju/chess-com-obs-overlay/commit/21aa55402eb0452fe5ac98b2a81ab6b3c845f1a2))
+
 # [1.2.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.1.0...v1.2.0) (2025-03-01)
 
 
