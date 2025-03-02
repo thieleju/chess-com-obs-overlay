@@ -59,13 +59,14 @@ export async function updateUi() {
 
 /**
  * Initialize by fetching the current ratings and updating the UI
+ * @param {boolean} loadSettings - Whether to load the settings from local storage
  */
-export async function init() {
+export async function init(loadSettings = true) {
   try {
     showSuccessMessage(elements, "Initializing...")
 
     // Read state from local storage and initialize or use default state
-    state = readStateFromLocalStorage() || STATE_DEFAULT
+    if (loadSettings) state = readStateFromLocalStorage() || STATE_DEFAULT
     state.processedGameUUIDs = new Set()
     state.editMode = false
     state.scriptStartTime = Math.floor(Date.now() / 1000)
@@ -161,10 +162,21 @@ export async function start() {
 
     // Disable reset button while reinitialization is running (to prevent double clicks)
     elements.reset.disabled = true
-    resetState()
+    // Reset wld and rating diff stats
+    state.modes = JSON.parse(JSON.stringify(STATE_DEFAULT.modes))
+    state.processedGameUUIDs = new Set()
+    state.scriptStartTime = Math.floor(Date.now() / 1000)
 
-    // Reinitialize the app
-    await init()
+    setUserNameInput(elements, state.username)
+    setShowRatingDiff(elements, state.showEloDiff)
+    setEditMode(elements, state.editMode)
+    setWld(elements, 0, 0, 0)
+    setRatingDiff(elements, 0)
+    setGameModeButtonActive(elements, state.gameMode)
+    setResetOnRestart(elements, state.resetOnRestart)
+
+    // Reinitialize the app without loading the settings from local storage
+    await init(false)
 
     state.editMode = false
     setEditMode(elements, false)
@@ -295,9 +307,15 @@ export function resetState() {
   console.log("Resetting state...")
 
   state = JSON.parse(JSON.stringify(STATE_DEFAULT))
-  state.processedGameUUIDs = new Set()
-  state.scriptStartTime = Math.floor(Date.now() / 1000)
-  state.username = elements.usernameInput.value
+  Object.assign(state, {
+    processedGameUUIDs: new Set(),
+    scriptStartTime: Math.floor(Date.now() / 1000),
+    // keep the below settings
+    username: elements.usernameInput.value,
+    gameMode: state.gameMode,
+    resetOnRestart: state.resetOnRestart,
+    showEloDiff: state.showEloDiff
+  })
 
   saveStateToLocalStorage(state)
 
