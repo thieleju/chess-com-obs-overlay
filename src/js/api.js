@@ -81,9 +81,10 @@ export async function fetchGames(username) {
 
 /**
  * Get the user agent for the fetch requests
+ * @see https://support.chess.com/en/articles/9650547-published-data-api for User-Agent requirements
  * @param {string} username - The username to fetch data for
  * @returns {string} The user agent
  */
 function getUserAgent(username) {
-  return `chess-com-obs-overlay (username: ${username}; contact: ${REPO_MAINTAINER} (chess.com username of repository maintainer); github: ${REPO_URL})`
+  return `chess-com-obs-overlay (username: ${username}; contact: ${REPO_MAINTAINER} (repository maintainer); github: ${REPO_URL})`
 }
