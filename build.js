@@ -3,6 +3,8 @@ import path from "node:path"
 import esbuild from "esbuild"
 import { minify } from "html-minifier-terser"
 
+const FILE_NAME = "chess-com-obs-overlay.html"
+
 /**
  * Build the JS bundle using esbuild.
  * @returns {Promise<string>} The bundled JS code.
@@ -49,9 +51,9 @@ async function buildHTML() {
   // Output to the dist folder
   const distDir = path.resolve("dist")
   if (!fs.existsSync(distDir)) fs.mkdirSync(distDir)
-  fs.writeFileSync(path.join(distDir, "wld.html"), htmlContent, "utf8")
+  fs.writeFileSync(path.join(distDir, FILE_NAME), htmlContent, "utf8")
 
-  console.log("✅ Built dist/wld.html")
+  console.log("✅ Built dist/" + FILE_NAME)
 }
 
 buildHTML().catch((error) => {
