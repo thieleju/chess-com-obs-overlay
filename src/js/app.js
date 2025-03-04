@@ -246,10 +246,30 @@ export async function start() {
  * @returns {number} The score value for the result
  */
 export function mapResult(result) {
-  if (!result) throw new Error("Invalid result: " + result)
-  if (result === "win") return 1
-  if (result === "draw") return 0.5
-  return 0
+  switch (result) {
+    case "win": {
+      return 1
+    }
+    case "lose":
+    case "checkmated":
+    case "resigned":
+    case "timeout":
+    case "abandoned":
+    case "bughousepartnerlose": {
+      return 0
+    }
+    case "agreed":
+    case "timevsinsufficient":
+    case "repetition":
+    case "stalemate":
+    case "insufficient":
+    case "50move": {
+      return 0.5
+    }
+    default: {
+      throw new Error("Invalid result: " + result)
+    }
+  }
 }
 
 /**
@@ -371,6 +391,9 @@ export function readStateFromLocalStorage() {
   try {
     const s = JSON.parse(localStorage.getItem("state"))
     console.log("Read state from local storage")
+
+    // quick fix for backwards compatibility
+    if (!Array.isArray(s.processedGameUUIDs)) s.processedGameUUIDs = []
     return s
   } catch {
     return STATE_DEFAULT
