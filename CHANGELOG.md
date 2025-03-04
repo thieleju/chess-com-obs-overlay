@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.2.1...v1.3.0) (2025-03-04)
+
+
+### Bug Fixes
+
+* Fix processedGameUUIDs not being saved correctly ([4db9f39](https://github.com/thieleju/chess-com-obs-overlay/commit/4db9f3957c49380f29395d39ab3e1233c355b100))
+
+
+### Features
+
+* Update release file name to include version ([102f0c1](https://github.com/thieleju/chess-com-obs-overlay/commit/102f0c12b9e9a9babd391e12776effc9aa33829a))
+
 ## [1.2.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.2.0...v1.2.1) (2025-03-02)
 
 
