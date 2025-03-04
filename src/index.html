@@ -11,7 +11,6 @@
       crossorigin="anonymous"
     />
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap");
       body {
         padding-top: 10px;
         padding-left: 10px;
@@ -19,28 +18,35 @@
         width: 100vw;
         color: white;
         background-color: white;
-        font-family: "Nunito", sans-serif;
+        font-family:
+          "Roobert", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
         line-height: 1;
         font-weight: bold;
       }
+
       .wld {
         font-size: 100px;
         word-spacing: 5px;
       }
+
       .rating {
         font-size: 50px;
       }
+
       .form-control {
         width: 316px;
       }
+
       .errorMessage {
         font-size: 10px;
         color: #f44336;
       }
+
       .successMessage {
         font-size: 10px;
         color: #4caf50;
       }
+
       .btn.active {
         background-color: #004a99 !important;
         border-color: #004a99 !important;
@@ -48,21 +54,21 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
   </head>
+
   <body>
-    <div>
-      <!-- WLD container -->
-      <div class="wld">
-        <div id="wld">0 / 0 / 0</div>
-      </div>
-      <!-- Elo diff container -->
-      <div id="eloDiffContainer" class="rating">
-        <span id="ratingLabel">Elo:</span>
-        <span id="ratingDiff">+0</span>
-      </div>
-      <!-- Error and success messages -->
-      <span id="errorMessage" class="errorMessage"></span>
-      <span id="successMessage" class="successMessage"></span>
+    <!-- WLD container -->
+    <div class="wld">
+      <div id="wld">0 / 0 / 0</div>
     </div>
+    <!-- Elo diff container -->
+    <div id="eloDiffContainer" class="rating">
+      <span id="ratingLabel">Elo:</span>
+      <span id="ratingDiff">+0</span>
+    </div>
+    <!-- Error and success messages -->
+    <span id="errorMessage" class="errorMessage"></span>
+    <span id="successMessage" class="successMessage"></span>
+
     <!-- Edit mode, hidden by default -->
     <div id="editMode" style="display: none">
       <!-- Game mode buttons -->
