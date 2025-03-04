@@ -149,7 +149,7 @@ export async function start() {
       state.modes[mode].score = { wins: 0, losses: 0, draws: 0 }
     }
     state.processedGameUUIDs = []
-
+    state.scriptStartTime = Math.floor(Date.now() / 1000)
     state.username = elements.usernameInput.value
     setUserNameInput(elements, event.target.value)
 
