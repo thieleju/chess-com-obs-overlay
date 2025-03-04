@@ -30,7 +30,8 @@ export default {
         assets: [
           {
             path: "dist/wld.html",
-            label: "chess-com-obs-overlay.html (Download this)"
+            label:
+              "chess-com-obs-overlay-v${nextRelease.version}.html (Download this)"
           }
         ]
       }
