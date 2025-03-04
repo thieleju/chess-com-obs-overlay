@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.3.2...v1.3.3) (2025-03-04)
+
+
+### Bug Fixes
+
+* Fix file name in build.js script ([8a2e820](https://github.com/thieleju/chess-com-obs-overlay/commit/8a2e8209e346058bab17503b31ddc043842f18db))
+
 ## [1.3.2](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.3.1...v1.3.2) (2025-03-04)
 
 
