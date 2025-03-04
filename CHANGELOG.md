@@ -1,3 +1,11 @@
+## [1.3.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.3.0...v1.3.1) (2025-03-04)
+
+
+### Bug Fixes
+
+* Fix size of username input ([90aae4c](https://github.com/thieleju/chess-com-obs-overlay/commit/90aae4c4068206b9d5a4d43a2c7ec1de44f5188c))
+* Fix wld not resetting after username change ([06dfada](https://github.com/thieleju/chess-com-obs-overlay/commit/06dfadaa2c1bb819315251af806f3987fffd44c8))
+
 # [1.3.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.2.1...v1.3.0) (2025-03-04)
 
 
