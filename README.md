@@ -2,12 +2,12 @@
 
 OBS Overlay for Win/Lose/Draw and rating ±
 
-> [!WARNING] 
+> [!WARNING]
 > The chess.com api is pretty inconsistent and sometimes games will only show up after a short delay.
 
 ## ✨ Features
 
-- Shows win/lose/draw and rating difference 
+- Shows win/lose/draw and rating difference
 - Option to change between `rapid`, `blitz` and `bullet`
 - Option to hide/show rating difference
 - By default win/lose/draw are reset at startup, but this can be disabled
@@ -22,6 +22,6 @@ OBS Overlay for Win/Lose/Draw and rating ±
 
 ![Setup](./assets/setup.gif)
 
-## 🐛 Bugs
+## 📃 Chess.com API reference
 
-- Currently the stats will reset at the end of a month. This is due to the fact that the chess.com api only really provides one endpoint to fetch all games of a player for a specific month. (I'll probably fix this in the future so that games carry over) [reference](https://www.chess.com/news/view/published-data-api)
+- Chess.com API Documentation [here](https://www.chess.com/news/view/published-data-api) (It's pretty much discontinued sadly)
