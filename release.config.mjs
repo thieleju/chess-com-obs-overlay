@@ -29,7 +29,7 @@ export default {
       {
         assets: [
           {
-            path: "dist/chess-com-obs-overlay",
+            path: "dist/chess-com-obs-overlay.html",
             label: "chess-com-obs-overlay.html (Download this)"
           }
         ]
