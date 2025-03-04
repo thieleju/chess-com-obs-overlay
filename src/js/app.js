@@ -67,13 +67,14 @@ export async function init(loadSettings = true) {
 
     // Read state from local storage and initialize or use default state
     if (loadSettings) state = readStateFromLocalStorage() || STATE_DEFAULT
-    state.processedGameUUIDs = new Set()
     state.editMode = false
-    state.scriptStartTime = Math.floor(Date.now() / 1000)
     const mode = state.modes[state.gameMode]
 
     // Reset stats of all modes if reset on restart is enabled
     if (state.resetOnRestart) {
+      // Only reset script start time if reset on restart is enabled to catch up on games played during the downtime
+      state.scriptStartTime = Math.floor(Date.now() / 1000)
+      state.processedGameUUIDs = []
       for (const mode in state.modes) {
         state.modes[mode].lastRatingDiff = 0
         state.modes[mode].score = { wins: 0, losses: 0, draws: 0 }
@@ -132,7 +133,7 @@ export function startInterval() {
  * Start the app
  */
 export async function start() {
-  await init()
+  await init(true)
 
   // ###### On username input change ######
   elements.usernameInput.addEventListener("change", (event) => {
@@ -147,7 +148,8 @@ export async function start() {
       state.modes[mode].initialRating = null
       state.modes[mode].score = { wins: 0, losses: 0, draws: 0 }
     }
-    state.processedGameUUIDs = new Set()
+    state.processedGameUUIDs = []
+
     state.username = elements.usernameInput.value
     setUserNameInput(elements, event.target.value)
 
@@ -164,7 +166,8 @@ export async function start() {
     elements.reset.disabled = true
     // Reset wld and rating diff stats
     state.modes = JSON.parse(JSON.stringify(STATE_DEFAULT.modes))
-    state.processedGameUUIDs = new Set()
+    state.processedGameUUIDs = []
+
     state.scriptStartTime = Math.floor(Date.now() / 1000)
 
     setUserNameInput(elements, state.username)
@@ -264,7 +267,7 @@ export function getScore(games) {
     (game) =>
       game.end_time > state.scriptStartTime &&
       game.time_class === state.gameMode &&
-      !state.processedGameUUIDs.has(game.uuid)
+      !state.processedGameUUIDs.includes(game.uuid)
   )
 
   for (const game of gamesToCheck) {
@@ -295,7 +298,9 @@ export function getScore(games) {
       }
     }
     // Mark the game as processed
-    state.processedGameUUIDs.add(game.uuid)
+    if (!state.processedGameUUIDs.includes(game.uuid)) {
+      state.processedGameUUIDs.push(game.uuid)
+    }
   }
   return newScore
 }
@@ -308,7 +313,7 @@ export function resetState() {
 
   state = JSON.parse(JSON.stringify(STATE_DEFAULT))
   Object.assign(state, {
-    processedGameUUIDs: new Set(),
+    processedGameUUIDs: [],
     scriptStartTime: Math.floor(Date.now() / 1000),
     // keep the below settings
     username: elements.usernameInput.value,

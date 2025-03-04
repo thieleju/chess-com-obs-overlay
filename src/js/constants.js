@@ -15,7 +15,7 @@ export const STATE_DEFAULT = {
   editMode: false,
   resetOnRestart: true,
   scriptStartTime: Math.floor(Date.now() / 1000),
-  processedGameUUIDs: new Set(),
+  processedGameUUIDs: [],
   modes: {
     rapid: {
       score: { wins: 0, losses: 0, draws: 0 },
