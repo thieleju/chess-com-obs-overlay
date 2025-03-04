@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.3.1...v1.3.2) (2025-03-04)
+
+
+### Bug Fixes
+
+* Fix typo in semantic release config preventing artefact export ([f4c4600](https://github.com/thieleju/chess-com-obs-overlay/commit/f4c4600275626e01bb19eaa75ed041eb215f0348))
+
 ## [1.3.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.3.0...v1.3.1) (2025-03-04)
 
 
