@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.3.3...v1.4.0) (2025-03-04)
+
+
+### Bug Fixes
+
+* Fix game results mapping error ([c5125d5](https://github.com/thieleju/chess-com-obs-overlay/commit/c5125d5aedce6d90f97f57afe8a69b1b4d38ff6c))
+
+
+### Features
+
+* Upgrade bootstrap to 5.0.2 ([c488e48](https://github.com/thieleju/chess-com-obs-overlay/commit/c488e48f431a0c99bf481b083e3ace503071527c))
+
 ## [1.3.3](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.3.2...v1.3.3) (2025-03-04)
 
 
