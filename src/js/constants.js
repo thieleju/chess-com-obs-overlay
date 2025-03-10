@@ -16,6 +16,8 @@ export const STATE_DEFAULT = {
   resetOnRestart: true,
   scriptStartTime: Math.floor(Date.now() / 1000),
   processedGameUUIDs: [],
+  scoreFormat: "wld", // valid: "wld", "wdl"
+  centerElements: false,
   modes: {
     rapid: {
       score: { wins: 0, losses: 0, draws: 0 },

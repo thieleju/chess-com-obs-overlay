@@ -8,9 +8,11 @@ import {
   setEditMode,
   setShowRatingDiff,
   setResetOnRestart,
+  setUserNameInput,
+  setScoreFormat,
+  setCentered,
   showSuccessMessage,
   showErrorMessage,
-  setUserNameInput,
   animateEloDiff
 } from "./dom.js"
 
@@ -27,7 +29,7 @@ export async function updateUi() {
     const games = await fetchGames(state.username)
     const score = getScore(games)
 
-    setWld(elements, score.wins, score.losses, score.draws)
+    setWld(elements, score.wins, score.losses, score.draws, state.scoreFormat)
 
     const allCurrentRatings = await fetchAllCurrentRatings(state.username)
     if (!allCurrentRatings) return
@@ -85,9 +87,17 @@ export async function init(loadSettings = true) {
     setShowRatingDiff(elements, state.showEloDiff)
     setEditMode(elements, false)
     setGameModeButtonActive(elements, state.gameMode)
-    setWld(elements, mode.score.wins, mode.score.losses, mode.score.draws)
     setRatingDiff(elements, mode.lastRatingDiff ?? 0)
     setResetOnRestart(elements, state.resetOnRestart)
+    setCentered(elements, state.centerElements)
+    setScoreFormat(elements, state.scoreFormat)
+    setWld(
+      elements,
+      mode.score.wins,
+      mode.score.losses,
+      mode.score.draws,
+      state.scoreFormat
+    )
 
     const allCurrentRatings = await fetchAllCurrentRatings(state.username)
     for (const mode in state.modes) {
@@ -135,6 +145,38 @@ export function startInterval() {
 export async function start() {
   await init(true)
 
+  // ###### On centered toggle change ######
+  elements.toggleCenter.addEventListener("click", (event) => {
+    showSuccessMessage(
+      elements,
+      `Set centered to ${event.target.checked ? "on" : "off"}`
+    )
+    state.centerElements = event.target.checked
+    setCentered(elements, event.target.checked)
+
+    saveStateToLocalStorage(state)
+  })
+
+  // ###### On wld select change ######
+  elements.selectScoreFormat.addEventListener("change", (event) => {
+    showSuccessMessage(
+      elements,
+      `Set score format to ${event.target.value.toUpperCase()}`
+    )
+    state.scoreFormat = event.target.value
+    setScoreFormat(elements, event.target.value)
+    const mode = state.modes[state.gameMode]
+    setWld(
+      elements,
+      mode.score.wins,
+      mode.score.losses,
+      mode.score.draws,
+      state.scoreFormat
+    )
+
+    saveStateToLocalStorage(state)
+  })
+
   // ###### On username input change ######
   elements.usernameInput.addEventListener("change", (event) => {
     showSuccessMessage(
@@ -173,10 +215,12 @@ export async function start() {
     setUserNameInput(elements, state.username)
     setShowRatingDiff(elements, state.showEloDiff)
     setEditMode(elements, state.editMode)
-    setWld(elements, 0, 0, 0)
+    setWld(elements, 0, 0, 0, state.scoreFormat)
     setRatingDiff(elements, 0)
     setGameModeButtonActive(elements, state.gameMode)
     setResetOnRestart(elements, state.resetOnRestart)
+    setCentered(elements, state.centerElements)
+    setScoreFormat(elements, state.scoreFormat)
 
     // Reinitialize the app without loading the settings from local storage
     await init(false)
@@ -219,7 +263,8 @@ export async function start() {
         elements,
         modeObj.score.wins,
         modeObj.score.losses,
-        modeObj.score.draws
+        modeObj.score.draws,
+        state.scoreFormat
       )
 
       saveStateToLocalStorage(state)
@@ -230,6 +275,8 @@ export async function start() {
   elements.body.addEventListener("click", () => {
     // skip if text input is clicked
     if (document.activeElement === elements.usernameInput) return
+    // skip if select input is clicked
+    if (document.activeElement === elements.selectScoreFormat) return
 
     const newMode = !state.editMode
     state.editMode = newMode
@@ -349,10 +396,12 @@ export function resetState() {
   setUserNameInput(elements, state.username)
   setShowRatingDiff(elements, state.showEloDiff)
   setEditMode(elements, state.editMode)
-  setWld(elements, 0, 0, 0)
+  setWld(elements, 0, 0, 0, state.scoreFormat)
   setRatingDiff(elements, 0)
   setGameModeButtonActive(elements, state.gameMode)
   setResetOnRestart(elements, state.resetOnRestart)
+  setCentered(elements, state.centerElements)
+  setScoreFormat(elements, state.scoreFormat)
 }
 
 /**
