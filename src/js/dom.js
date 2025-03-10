@@ -25,6 +25,8 @@ export function getDomElements() {
     toggleResetOnRestart: document.getElementById("toggleResetOnRestart"),
     mainContainer: document.getElementById("mainContainer"),
     selectScoreFormat: document.getElementById("selectScoreFormat"),
+    buttonScoreFormatWld: document.getElementById("btnWLD"),
+    buttonScoreFormatWdl: document.getElementById("btnWDL"),
     toggleCenter: document.getElementById("toggleCenter"),
     modes: {
       rapid: document.getElementById("rapid"),
@@ -78,12 +80,19 @@ export function setRatingDiff(domElements, ratingDiff) {
 }
 
 /**
- * Update the rating score format
+ * Update the score format buttons
  * @param {object} domElements - The DOM elements
  * @param {"wld" | "wdl"} scoreFormat - The score format
  */
-export function setScoreFormat(domElements, scoreFormat) {
-  domElements.selectScoreFormat.value = scoreFormat
+export function setScoreFormatButtonActive(domElements, scoreFormat) {
+  domElements.buttonScoreFormatWld.classList.toggle(
+    "active",
+    scoreFormat === "wld"
+  )
+  domElements.buttonScoreFormatWdl.classList.toggle(
+    "active",
+    scoreFormat === "wdl"
+  )
 }
 
 /**

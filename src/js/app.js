@@ -9,7 +9,7 @@ import {
   setShowRatingDiff,
   setResetOnRestart,
   setUserNameInput,
-  setScoreFormat,
+  setScoreFormatButtonActive,
   setCentered,
   showSuccessMessage,
   showErrorMessage,
@@ -90,7 +90,7 @@ export async function init(loadSettings = true) {
     setRatingDiff(elements, mode.lastRatingDiff ?? 0)
     setResetOnRestart(elements, state.resetOnRestart)
     setCentered(elements, state.centerElements)
-    setScoreFormat(elements, state.scoreFormat)
+    setScoreFormatButtonActive(elements, state.scoreFormat)
     setWld(
       elements,
       mode.score.wins,
@@ -157,14 +157,26 @@ export async function start() {
     saveStateToLocalStorage(state)
   })
 
-  // ###### On wld select change ######
-  elements.selectScoreFormat.addEventListener("change", (event) => {
-    showSuccessMessage(
+  // ###### On wld format change buttons ######
+  elements.buttonScoreFormatWld.addEventListener("click", () => {
+    showSuccessMessage(elements, "Set score format to WLD")
+    state.scoreFormat = "wld"
+    setScoreFormatButtonActive(elements, "wld")
+    const mode = state.modes[state.gameMode]
+    setWld(
       elements,
-      `Set score format to ${event.target.value.toUpperCase()}`
+      mode.score.wins,
+      mode.score.losses,
+      mode.score.draws,
+      state.scoreFormat
     )
-    state.scoreFormat = event.target.value
-    setScoreFormat(elements, event.target.value)
+
+    saveStateToLocalStorage(state)
+  })
+  elements.buttonScoreFormatWdl.addEventListener("click", () => {
+    showSuccessMessage(elements, "Set score format to WDL")
+    state.scoreFormat = "wdl"
+    setScoreFormatButtonActive(elements, "wdl")
     const mode = state.modes[state.gameMode]
     setWld(
       elements,
@@ -220,7 +232,7 @@ export async function start() {
     setGameModeButtonActive(elements, state.gameMode)
     setResetOnRestart(elements, state.resetOnRestart)
     setCentered(elements, state.centerElements)
-    setScoreFormat(elements, state.scoreFormat)
+    setScoreFormatButtonActive(elements, state.scoreFormat)
 
     // Reinitialize the app without loading the settings from local storage
     await init(false)
@@ -401,7 +413,7 @@ export function resetState() {
   setGameModeButtonActive(elements, state.gameMode)
   setResetOnRestart(elements, state.resetOnRestart)
   setCentered(elements, state.centerElements)
-  setScoreFormat(elements, state.scoreFormat)
+  setScoreFormatButtonActive(elements, state.scoreFormat)
 }
 
 /**
@@ -443,6 +455,8 @@ export function readStateFromLocalStorage() {
 
     // quick fix for backwards compatibility
     if (!Array.isArray(s.processedGameUUIDs)) s.processedGameUUIDs = []
+    if (!s.scoreFormat) s.scoreFormat = "wld"
+
     return s
   } catch {
     return STATE_DEFAULT
