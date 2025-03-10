@@ -25,6 +25,19 @@ export default [
     ]
   },
   {
+    files: ["**/*.test.js"],
+    languageOptions: {
+      globals: {
+        jest: "readonly",
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly"
+      }
+    }
+  },
+  {
     languageOptions: {
       globals: {
         requestAnimationFrame: "readonly"

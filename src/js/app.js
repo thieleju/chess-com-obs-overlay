@@ -472,4 +472,6 @@ window.addEventListener("beforeunload", () => {
   clearInterval(interval)
 })
 
-start()
+if (process.env.NODE_ENV !== "test") {
+  start()
+}
