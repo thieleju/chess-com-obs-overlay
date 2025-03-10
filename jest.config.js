@@ -2,7 +2,7 @@ export default {
   setupFiles: ["./tests/jest.setup.js"],
   testEnvironment: "jsdom",
   transform: {
-    "^.+\\.js$": "babel-jest" // Verwende Babel, um .js-Dateien zu transformieren
+    "^.+\\.js$": "babel-jest"
   },
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1"

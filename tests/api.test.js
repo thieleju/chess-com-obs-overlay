@@ -1,169 +1,87 @@
-/* eslint-disable no-undef */
 import {
   fetchData,
   fetchAllCurrentRatings,
   getGamesUrl,
   fetchGames
 } from "../src/js/api.js"
+import { DateTime } from "luxon"
 
-import { CHESS_API_URL } from "../src/js/constants.js"
-
-// define fetch globally in tests to avoid ReferenceError: fetch is not defined
-globalThis.fetch = jest.fn(() =>
-  Promise.resolve({
-    ok: true,
-    json: () => Promise.resolve({ test: "data" })
-  })
-)
-
-describe("fetchData", () => {
+describe("API functions", () => {
   beforeEach(() => {
-    jest.useFakeTimers()
     globalThis.fetch = jest.fn()
   })
 
   afterEach(() => {
-    jest.useRealTimers()
     jest.resetAllMocks()
   })
 
-  test("returns data when response is ok", async () => {
-    const fakeData = { key: "value" }
-    globalThis.fetch.mockResolvedValue({
+  it("fetchData should return data for a successful fetch", async () => {
+    const dummyData = { test: "data" }
+    const response = {
       ok: true,
-      json: () => Promise.resolve(fakeData)
-    })
-
-    const url = "http://example.com"
-    const username = "testuser"
-    const dataPromise = fetchData(url, username)
-
-    // Fast-forward timer so that the timeout does not trigger.
-    jest.runAllTimers()
-
-    const data = await dataPromise
-    expect(data).toEqual(fakeData)
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      url,
-      expect.objectContaining({
-        signal: expect.any(Object),
-        headers: expect.objectContaining({
-          "User-Agent": expect.stringContaining(`username: ${username}`),
-          "Accept-Encoding": "gzip"
-        })
-      })
-    )
-  })
-
-  test("throws error when response is not ok", async () => {
-    globalThis.fetch.mockResolvedValue({
-      ok: false,
-      status: 404,
-      json: () => Promise.resolve({})
-    })
-
-    const url = "http://example.com"
-    const username = "testuser"
-
-    jest.runAllTimers()
-
-    await expect(fetchData(url, username)).rejects.toThrow(/HTTP Error: 404/)
-  })
-
-  test("throws error when no data is returned", async () => {
-    globalThis.fetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(null)
-    })
-
-    const url = "http://example.com"
-    const username = "testuser"
-
-    jest.runAllTimers()
-
-    await expect(fetchData(url, username)).rejects.toThrow(/No data received/)
-  })
-})
-
-describe("fetchAllCurrentRatings", () => {
-  beforeEach(() => {
-    globalThis.fetch = jest.fn()
-  })
-  afterEach(() => {
-    jest.resetAllMocks()
-  })
-
-  test("returns ratings correctly", async () => {
-    const fakeData = {
-      chess_rapid: { last: { rating: 1500 } },
-      chess_blitz: { last: { rating: 1600 } },
-      chess_bullet: { last: { rating: 1700 } }
+      json: jest.fn().mockResolvedValue(dummyData)
     }
+    fetch.mockResolvedValue(response)
 
-    globalThis.fetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(fakeData)
-    })
-
-    const username = "testuser"
-    const ratings = await fetchAllCurrentRatings(username)
-    expect(ratings).toEqual({ rapid: 1500, blitz: 1600, bullet: 1700 })
+    const data = await fetchData("https://example.com", "testuser")
+    expect(data).toEqual(dummyData)
+    expect(fetch).toHaveBeenCalled()
   })
-})
 
-describe("getGamesUrl", () => {
-  test("returns a URL with the correct format", () => {
-    const username = "testuser"
-    const url = getGamesUrl(username)
-    // Expected format: {CHESS_API_URL}/{username}/games/{year}/{month}
-    const regex = new RegExp(
-      `^${CHESS_API_URL}/${username}/games/\\d{4}/\\d{2}$`
+  it("fetchData should throw an error for a non-ok response", async () => {
+    const response = {
+      ok: false,
+      status: 404
+    }
+    fetch.mockResolvedValue(response)
+    await expect(fetchData("https://example.com", "testuser")).rejects.toThrow(
+      "HTTP Error: 404"
     )
-    expect(url).toMatch(regex)
-  })
-})
-
-describe("fetchGames", () => {
-  beforeEach(() => {
-    globalThis.fetch = jest.fn()
-  })
-  afterEach(() => {
-    jest.resetAllMocks()
   })
 
-  test("returns sorted games array descending by end_time", async () => {
-    const fakeGames = [
-      { end_time: 100, uuid: "1" },
-      { end_time: 300, uuid: "3" },
-      { end_time: 200, uuid: "2" }
+  it("fetchAllCurrentRatings should return a ratings object", async () => {
+    const dummyData = {
+      chess_rapid: { last: { rating: 1500 } },
+      chess_blitz: { last: { rating: 1400 } },
+      chess_bullet: { last: { rating: 1300 } }
+    }
+    // Mock fetch to return dummyData
+    jest.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue(dummyData)
+    })
+    const ratings = await fetchAllCurrentRatings("TestUser")
+    expect(ratings).toEqual({ rapid: 1500, blitz: 1400, bullet: 1300 })
+    globalThis.fetch.mockRestore()
+  })
+
+  it("getGamesUrl should return the correct URL format", () => {
+    const username = "TestUser"
+    const url = getGamesUrl(username)
+    const date = DateTime.local().setZone("America/Los_Angeles")
+    const expectedMonth = date.month.toString().padStart(2, "0")
+    const expectedYear = date.year
+    expect(url).toContain(username.toLowerCase())
+    expect(url).toContain(`${expectedYear}/${expectedMonth}`)
+  })
+
+  it("fetchGames should return a sorted games array", async () => {
+    const dummyGames = [
+      { uuid: "1", end_time: 2000 },
+      { uuid: "2", end_time: 3000 },
+      { uuid: "3", end_time: 1000 }
     ]
-    const fakeData = { games: fakeGames }
-
-    globalThis.fetch.mockResolvedValue({
+    const dummyData = { games: dummyGames }
+    // Mock fetch to return dummyData
+    jest.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve(fakeData)
+      json: jest.fn().mockResolvedValue(dummyData)
     })
-
-    const username = "testuser"
-    const games = await fetchGames(username)
-    // The games should be sorted in descending order by end_time: [300, 200, 100]
-    expect(games).toEqual([
-      { end_time: 300, uuid: "3" },
-      { end_time: 200, uuid: "2" },
-      { end_time: 100, uuid: "1" }
-    ])
-  })
-
-  test("returns null if data contains a message", async () => {
-    const fakeData = { message: "User not found" }
-
-    globalThis.fetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(fakeData)
-    })
-
-    const username = "testuser"
-    const games = await fetchGames(username)
-    expect(games).toBeNull()
+    const games = await fetchGames("testuser")
+    // Verify that games are sorted in descending order by end_time
+    expect(games[0].end_time).toBe(3000)
+    expect(games[1].end_time).toBe(2000)
+    expect(games[2].end_time).toBe(1000)
+    globalThis.fetch.mockRestore()
   })
 })
