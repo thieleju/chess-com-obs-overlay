@@ -103,16 +103,6 @@
             placeholder="Enter your chess.com username"
           />
         </div>
-        <!-- Score Format -->
-        <div
-          class="form-control mt-2 d-flex align-items-center"
-          style="gap: 6px"
-        >
-          <select id="selectScoreFormat" class="form-select border-0 p-0 h-100">
-            <option value="wld" selected>Score Format: W/L/D</option>
-            <option value="wdl">Score Format: W/D/L</option>
-          </select>
-        </div>
         <!-- Show reset on restart toggle -->
         <div class="mt-2 d-flex align-items-center" style="gap: 6px">
           <input
@@ -162,6 +152,16 @@
           >
             Centered
           </label>
+        </div>
+        <!-- Score Format -->
+        <div class="mt-2 d-flex align-items-center" style="gap: 6px">
+          <label for="scoreFormat" style="margin-bottom: 0"
+            >Score Format:</label
+          >
+          <button id="btnWLD" class="btn btn-outline-primary active">
+            W/L/D
+          </button>
+          <button id="btnWDL" class="btn btn-outline-primary">W/D/L</button>
         </div>
       </div>
     </div>

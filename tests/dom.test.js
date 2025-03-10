@@ -2,8 +2,8 @@ import {
   getDomElements,
   setWld,
   setRatingDiff,
-  setScoreFormat,
   setCentered,
+  setScoreFormatButtonActive,
   setGameModeButtonActive,
   setShowRatingDiff,
   setResetOnRestart,
@@ -32,10 +32,8 @@ describe("DOM functions", () => {
       <input id="toggleElo" type="checkbox" />
       <div id="eloDiffContainer" style="display: none"></div>
       <input id="toggleResetOnRestart" type="checkbox" />
-      <select id="selectScoreFormat">
-        <option value="wld" selected>W/L/D</option>
-        <option value="wdl">W/D/L</option>
-      </select>
+      <button id="btnWLD" class="btn btn-outline-primary active">W/L/D</button>
+      <button id="btnWDL" class="btn btn-outline-primary">W/D/L</button>
       <input id="toggleCenter" type="checkbox" />
       <button id="rapid"></button>
       <button id="blitz"></button>
@@ -55,7 +53,8 @@ describe("DOM functions", () => {
       eloDiffContainer: document.getElementById("eloDiffContainer"),
       toggleResetOnRestart: document.getElementById("toggleResetOnRestart"),
       mainContainer: document.getElementById("mainContainer"),
-      selectScoreFormat: document.getElementById("selectScoreFormat"),
+      buttonScoreFormatWld: document.getElementById("btnWLD"),
+      buttonScoreFormatWdl: document.getElementById("btnWDL"),
       toggleCenter: document.getElementById("toggleCenter"),
       modes: {
         rapid: document.getElementById("rapid"),
@@ -100,9 +99,21 @@ describe("DOM functions", () => {
     expect(elements.ratingDiff.style.color).toBe("rgb(244, 67, 54)")
   })
 
-  it("setScoreFormat should set the value of selectScoreFormat", () => {
-    setScoreFormat(elements, "wld")
-    expect(elements.selectScoreFormat.value).toBe("wld")
+  it("setScoreFormatButtonActive should set active class on the selected button", () => {
+    setScoreFormatButtonActive(elements, "wdl")
+    expect(elements.buttonScoreFormatWld.classList.contains("active")).toBe(
+      false
+    )
+    expect(elements.buttonScoreFormatWdl.classList.contains("active")).toBe(
+      true
+    )
+    setScoreFormatButtonActive(elements, "wld")
+    expect(elements.buttonScoreFormatWld.classList.contains("active")).toBe(
+      true
+    )
+    expect(elements.buttonScoreFormatWdl.classList.contains("active")).toBe(
+      false
+    )
   })
 
   it("setCentered should toggle classes and checkbox based on isCentered", () => {
