@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.5.0...v1.5.1) (2025-03-10)
+
+
+### Bug Fixes
+
+* Replace select with radio buttons because obs doesn't like selects ([c3b5646](https://github.com/thieleju/chess-com-obs-overlay/commit/c3b564664260d230ad38d2e7e602958a298649a4))
+
 # [1.5.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.4.0...v1.5.0) (2025-03-10)
 
 
