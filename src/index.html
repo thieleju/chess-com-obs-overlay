@@ -56,78 +56,113 @@
         background-color: #004a99 !important;
         border-color: #004a99 !important;
       }
+      .bootstrap-select .dropdown-toggle:focus {
+        outline: thin dotted #333 !important;
+        outline: 5px auto -webkit-focus-ring-color !important;
+        outline-offset: -2px;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
   </head>
 
   <body>
-    <!-- WLD container -->
-    <div class="wld">
-      <div id="wld">0 / 0 / 0</div>
-    </div>
-    <!-- Elo diff container -->
-    <div id="eloDiffContainer" class="rating">
-      <span id="ratingLabel">Elo:</span>
-      <span id="ratingDiff">+0</span>
-    </div>
-    <!-- Error and success messages -->
-    <span id="errorMessage" class="errorMessage"></span>
-    <span id="successMessage" class="successMessage"></span>
+    <div id="mainContainer">
+      <!-- WLD container -->
+      <div class="wld">
+        <div id="wld">0 / 0 / 0</div>
+      </div>
+      <!-- Elo diff container -->
+      <div id="eloDiffContainer" class="rating">
+        <span id="ratingLabel">Elo:</span>
+        <span id="ratingDiff">+0</span>
+      </div>
+      <!-- Error and success messages -->
+      <span id="errorMessage" class="errorMessage"></span>
+      <span id="successMessage" class="successMessage"></span>
 
-    <!-- Edit mode, hidden by default -->
-    <div id="editMode" style="display: none">
-      <!-- Game mode buttons -->
-      <button id="rapid" class="btn btn-primary active" type="button">
-        Rapid
-      </button>
-      <button id="blitz" class="btn btn-primary" type="button">Blitz</button>
-      <button id="bullet" class="btn btn-primary" type="button">Bullet</button>
-      <button id="reset" class="btn btn-secondary" type="button">
-        Reset Stats
-      </button>
-      <!-- Username input -->
-      <div class="mt-1">
-        <input
-          type="text"
-          class="form-control w-300"
-          id="usernameInput"
-          value=""
-          placeholder="Enter your chess.com username"
-        />
-      </div>
-      <!-- Show reset on restart toggle -->
-      <div class="form-check mt-2 d-flex align-items-center" style="gap: 6px">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="toggleResetOnRestart"
-          style="transform: scale(1.2); margin-top: 1px"
-          checked
-        />
-        <label
-          class="form-check-label"
-          for="toggleResetOnRestart"
-          style="margin-bottom: 0"
+      <!-- Edit mode, hidden by default -->
+      <div id="editMode" style="display: none">
+        <!-- Game mode buttons -->
+        <button id="rapid" class="btn btn-primary active" type="button">
+          Rapid
+        </button>
+        <button id="blitz" class="btn btn-primary" type="button">Blitz</button>
+        <button id="bullet" class="btn btn-primary" type="button">
+          Bullet
+        </button>
+        <button id="reset" class="btn btn-secondary" type="button">
+          Reset Stats
+        </button>
+        <!-- Username input -->
+        <div class="mt-1">
+          <input
+            type="text"
+            class="form-control w-300"
+            id="usernameInput"
+            value=""
+            placeholder="Enter your chess.com username"
+          />
+        </div>
+        <!-- Score Format -->
+        <div
+          class="form-control mt-2 d-flex align-items-center"
+          style="gap: 6px"
         >
-          Reset W/L/D on Restart
-        </label>
-      </div>
-      <!-- Show elo toggle -->
-      <div class="form-check mt-2 d-flex align-items-center" style="gap: 6px">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="toggleElo"
-          style="transform: scale(1.2); margin-top: 1px"
-          checked
-        />
-        <label
-          class="form-check-label"
-          for="toggleElo"
-          style="margin-bottom: 0"
-        >
-          Show Elo ±
-        </label>
+          <select id="selectScoreFormat" class="form-select border-0 p-0 h-100">
+            <option value="wld" selected>Score Format: W/L/D</option>
+            <option value="wdl">Score Format: W/D/L</option>
+          </select>
+        </div>
+        <!-- Show reset on restart toggle -->
+        <div class="mt-2 d-flex align-items-center" style="gap: 6px">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="toggleResetOnRestart"
+            style="transform: scale(1.2); margin-top: 1px"
+            checked
+          />
+          <label
+            class="form-check-label"
+            for="toggleResetOnRestart"
+            style="margin-bottom: 0"
+          >
+            Reset Score on Restart
+          </label>
+        </div>
+        <!-- Show elo toggle -->
+        <div class="form-check mt-2 d-flex align-items-center" style="gap: 6px">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="toggleElo"
+            style="transform: scale(1.2); margin-top: 1px"
+            checked
+          />
+          <label
+            class="form-check-label"
+            for="toggleElo"
+            style="margin-bottom: 0"
+          >
+            Show Elo ±
+          </label>
+        </div>
+        <!-- Toggle center -->
+        <div class="form-check mt-2 d-flex align-items-center" style="gap: 6px">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="toggleCenter"
+            style="transform: scale(1.2); margin-top: 1px"
+          />
+          <label
+            class="form-check-label"
+            for="toggleCenter"
+            style="margin-bottom: 0"
+          >
+            Centered
+          </label>
+        </div>
       </div>
     </div>
     <!-- SCRIPT_PLACEHOLDER -->
