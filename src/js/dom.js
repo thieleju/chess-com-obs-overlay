@@ -23,6 +23,9 @@ export function getDomElements() {
     toggleElo: document.getElementById("toggleElo"),
     eloDiffContainer: document.getElementById("eloDiffContainer"),
     toggleResetOnRestart: document.getElementById("toggleResetOnRestart"),
+    mainContainer: document.getElementById("mainContainer"),
+    selectScoreFormat: document.getElementById("selectScoreFormat"),
+    toggleCenter: document.getElementById("toggleCenter"),
     modes: {
       rapid: document.getElementById("rapid"),
       blitz: document.getElementById("blitz"),
@@ -37,9 +40,23 @@ export function getDomElements() {
  * @param {number} wins - The number of wins
  * @param {number} losses - The number of losses
  * @param {number} draws - The number of draws
+ * @param {string} scoreFormat - The score format
  */
-export function setWld(domElements, wins, losses, draws) {
-  domElements.wld.innerHTML = `${wins ?? 0} / ${losses ?? 0} / ${draws ?? 0}`
+export function setWld(domElements, wins, losses, draws, scoreFormat) {
+  switch (scoreFormat) {
+    case "wdl": {
+      domElements.wld.innerHTML = `${wins ?? 0} / ${draws ?? 0} / ${losses ?? 0}`
+      break
+    }
+    case "wld": {
+      domElements.wld.innerHTML = `${wins ?? 0} / ${losses ?? 0} / ${draws ?? 0}`
+      break
+    }
+    default: {
+      console.error("Invalid score format", scoreFormat)
+      domElements.wld.innerHTML = `${wins ?? 0} / ${draws ?? 0} / ${losses ?? 0}`
+    }
+  }
 }
 
 /**
@@ -58,6 +75,27 @@ export function setRatingDiff(domElements, ratingDiff) {
     domElements.ratingDiff.innerHTML = `${ratingDiff}`
     domElements.ratingDiff.style.color = COLOR_RED
   }
+}
+
+/**
+ * Update the rating score format
+ * @param {object} domElements - The DOM elements
+ * @param {"wld" | "wdl"} scoreFormat - The score format
+ */
+export function setScoreFormat(domElements, scoreFormat) {
+  domElements.selectScoreFormat.value = scoreFormat
+}
+
+/**
+ * Set all elements centered
+ * @param {object} domElements - The DOM elements
+ * @param {string} isCentered - If true, elements are switched to centered
+ */
+export function setCentered(domElements, isCentered) {
+  domElements.toggleCenter.checked = isCentered
+  domElements.mainContainer.classList.toggle("d-flex", isCentered)
+  domElements.mainContainer.classList.toggle("flex-column", isCentered)
+  domElements.mainContainer.classList.toggle("align-items-center", isCentered)
 }
 
 /**
