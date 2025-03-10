@@ -1,3 +1,11 @@
+# [1.5.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.4.0...v1.5.0) (2025-03-10)
+
+
+### Features
+
+* Add option to change score format and to center score elements ([295b394](https://github.com/thieleju/chess-com-obs-overlay/commit/295b394057f0e8cb544c474b282ce93823161036))
+* Add tests for api.js, app.js and dom.js ([9da0af2](https://github.com/thieleju/chess-com-obs-overlay/commit/9da0af2056e93bf9e85e3d4527aea212890d4d38))
+
 # [1.4.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.3.3...v1.4.0) (2025-03-04)
 
 
