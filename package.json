@@ -21,7 +21,7 @@
   "author": "",
   "license": "GPL-3.0-only",
   "devDependencies": {
-    "@babel/core": "^7.26.9",
+    "@babel/core": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
     "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.22.0",
