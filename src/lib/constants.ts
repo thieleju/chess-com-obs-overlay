@@ -7,8 +7,38 @@ export const CHESS_API_URL = "https://api.chess.com/pub/player"
 export const REPO_URL = "https://github.com/thieleju/chess-com-obs-overlay"
 export const REPO_MAINTAINER = "thieleju"
 export const INTERVAL_MS = 6000
-export const FETCH_HARD_TIMEOUT = INTERVAL_MS - 100 // All games of a month are fetched at once, this can lead to the request timing out
-export const STATE_DEFAULT = {
+export const FETCH_HARD_TIMEOUT = INTERVAL_MS - 100
+
+export interface Score {
+  wins: number
+  losses: number
+  draws: number
+}
+
+export interface ModeState {
+  score: Score
+  initialRating: number | null
+  lastRatingDiff: number
+}
+
+export interface State {
+  username: string
+  gameMode: "rapid" | "blitz" | "bullet"
+  showEloDiff: boolean
+  editMode: boolean
+  resetOnRestart: boolean
+  scriptStartTime: number
+  processedGameUUIDs: string[]
+  scoreFormat: "wld" | "wdl"
+  centerElements: boolean
+  modes: {
+    rapid: ModeState
+    blitz: ModeState
+    bullet: ModeState
+  }
+}
+
+export const STATE_DEFAULT: State = {
   username: "",
   gameMode: "rapid",
   showEloDiff: true,
@@ -16,7 +46,7 @@ export const STATE_DEFAULT = {
   resetOnRestart: true,
   scriptStartTime: Math.floor(Date.now() / 1000),
   processedGameUUIDs: [],
-  scoreFormat: "wld", // valid: "wld", "wdl"
+  scoreFormat: "wld",
   centerElements: false,
   modes: {
     rapid: {
