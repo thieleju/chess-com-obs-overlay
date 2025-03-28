@@ -1,8 +1,8 @@
 // Plugins
-import Components from "unplugin-vue-components/vite"
 import Vue from "@vitejs/plugin-vue"
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify"
 import ViteFonts from "unplugin-fonts/vite"
+import { viteSingleFile } from "vite-plugin-singlefile"
 
 // Utilities
 import { defineConfig } from "vite"
@@ -21,7 +21,6 @@ export default defineConfig({
         configFile: "src/styles/settings.scss"
       }
     }),
-    Components(),
     ViteFonts({
       google: {
         families: [
@@ -31,8 +30,14 @@ export default defineConfig({
           }
         ]
       }
+    }),
+    viteSingleFile({
+      removeViteModuleLoader: true
     })
   ],
+  build: {
+    minify: true
+  },
   define: { "process.env": {} },
   resolve: {
     alias: {
