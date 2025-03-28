@@ -204,6 +204,7 @@ const fontFamilies = [
   "Roboto",
   "Nunito",
   "Helvetica",
+  "Georgia",
   "Times New Roman",
   "Courier New",
   "cursive",
