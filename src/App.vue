@@ -1,8 +1,8 @@
 <template>
-  <v-container @click="toggleEditMode" fluid class="pa-0 ma-0">
+  <v-container fluid class="pa-0 ma-0" @click="toggleEditMode">
     <!-- WLD Score Display -->
     <v-row class="pa-0 ma-0">
-      <v-col cols="12">
+      <v-col cols="12" class="pa-0 ma-0">
         <div
           :class="{
             'text-center': state.centerElements,
@@ -15,8 +15,8 @@
     </v-row>
 
     <!-- Elo Difference Display -->
-    <v-row class="pa-0 ma-0" v-if="state.showEloDiff">
-      <v-col cols="12">
+    <v-row v-if="state.showEloDiff" class="pa-0 ma-0">
+      <v-col cols="12" class="pa-0 ma-0">
         <div
           :class="{
             'text-center': state.centerElements,
@@ -35,20 +35,20 @@
     <v-row class="pa-0 ma-0">
       <v-col cols="12">
         <v-alert
+          v-if="errorMessage"
           dense
           hide-details
           variant="outlined"
           type="error"
-          v-if="errorMessage"
         >
           {{ errorMessage }}
         </v-alert>
         <v-alert
+          v-if="successMessage"
           dense
           hide-details
           variant="outlined"
           type="success"
-          v-if="successMessage"
         >
           {{ successMessage }}
         </v-alert>
@@ -59,21 +59,22 @@
     <v-row v-show="state.editMode" class="pa-0 ma-0">
       <v-col cols="12" md="8">
         <v-btn-toggle
-          dense
           v-model="state.gameMode"
+          variant="outlined"
+          dense
           mandatory
           @change="showSuccess('Game mode changed to ')"
         >
-          <v-btn value="rapid" hide-details>Rapid</v-btn>
-          <v-btn value="blitz" hide-details>Blitz</v-btn>
-          <v-btn value="bullet" hide-details>Bullet</v-btn>
+          <v-btn value="rapid" hide-details> Rapid </v-btn>
+          <v-btn value="blitz" hide-details> Blitz </v-btn>
+          <v-btn value="bullet" hide-details> Bullet </v-btn>
         </v-btn-toggle>
         <v-btn
           variant="outlined"
           color="secondary"
-          @click="resetStats"
           :disabled="isResetting"
           class="mx-2"
+          @click="resetStats"
         >
           Reset Stats
         </v-btn>
@@ -81,46 +82,51 @@
     </v-row>
 
     <v-row v-show="state.editMode" class="pa-0 ma-0">
-      <v-col cols="12" md="4">
+      <v-col cols="12">
         <v-text-field
+          v-model="state.username"
           dense
           hide-details
-          v-model="state.username"
           label="Chess.com Username"
           variant="outlined"
           @change="onUsernameChange"
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
     <v-row v-show="state.editMode" class="pa-0 ma-0">
-      <v-col cols="12" md="4">
+      <v-col cols="12">
         <v-checkbox
           v-model="state.resetOnRestart"
           dense
           label="Reset Score on Restart"
           hide-details
-        ></v-checkbox>
+        />
         <v-checkbox
           v-model="state.showEloDiff"
           dense
           label="Show Elo ±"
           hide-details
-        ></v-checkbox>
+        />
         <v-checkbox
           v-model="state.centerElements"
           dense
           label="Centered"
           hide-details
-        ></v-checkbox>
+        />
       </v-col>
     </v-row>
 
     <v-row v-show="state.editMode" class="pa-0 ma-0">
-      <v-col cols="12" md="4">
-        <v-btn-toggle dense v-model="state.scoreFormat" mandatory>
-          <v-btn value="wld">W/L/D</v-btn>
-          <v-btn value="wdl">W/D/L</v-btn>
+      <v-col cols="12">
+        <v-btn-toggle
+          v-model="state.scoreFormat"
+          variant="outlined"
+          dense
+          mandatory
+        >
+          <v-btn value="wld"> W/L/D </v-btn>
+          <v-btn value="wdl"> W/D/L </v-btn>
         </v-btn-toggle>
       </v-col>
     </v-row>
@@ -128,8 +134,16 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, reactive, ref, computed, onMounted } from "vue"
-import { STATE_DEFAULT, type State } from "./lib/constants"
+import {
+  STATE_DEFAULT,
+  COLOR_GREEN,
+  COLOR_RED,
+  COLOR_WHITE,
+  ANIMATION_DURATION,
+  INTERVAL_MS
+} from "./lib/constants"
+
+import { reactive, ref, computed, onMounted, watch, onBeforeUnmount } from "vue"
 import { fetchGames, fetchAllCurrentRatings } from "./lib/api"
 
 // Reactive state from default settings
@@ -154,11 +168,12 @@ const formattedRatingDiff = computed(() => {
 })
 
 const ratingDiffColor = computed(() => {
-  if (currentRatingDiff.value === 0) return "#ffffff"
-  return currentRatingDiff.value > 0 ? "#4caf50" : "#f44336"
+  if (currentRatingDiff.value === 0) return COLOR_WHITE
+  return currentRatingDiff.value > 0 ? COLOR_GREEN : COLOR_RED
 })
 
 let intervalId: number | undefined
+let isRunning: boolean = false
 
 // Show success message for 1 second
 function showSuccess(msg: string) {
@@ -173,8 +188,8 @@ function showError(msg: string) {
 // Update UI by fetching game data and ratings
 async function updateUi() {
   try {
-    const games = await fetchGames(state.username)
-    const score = getScore(games)
+    const games: ChessGame[] = (await fetchGames(state.username)) as ChessGame[]
+    const score: Score = getScore(games)
     state.modes[state.gameMode].score = score
 
     const allCurrentRatings = await fetchAllCurrentRatings(state.username)
@@ -197,31 +212,27 @@ async function updateUi() {
       state.modes[state.gameMode].lastRatingDiff = ratingDiff
       saveState()
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleError(error)
   }
 }
 
 // Calculate score from fetched games
-function getScore(games: any[]): {
-  wins: number
-  losses: number
-  draws: number
-} {
+function getScore(games: ChessGame[]): Score {
   const modeScore = state.modes[state.gameMode].score
-  let newScore = {
+  const newScore = {
     wins: modeScore.wins,
     losses: modeScore.losses,
     draws: modeScore.draws
   }
   if (!games || games.length === 0) return newScore
   const filteredGames = games.filter(
-    (game: any) =>
+    (game: ChessGame) =>
       game.end_time > state.scriptStartTime &&
       game.time_class === state.gameMode &&
       !state.processedGameUUIDs.includes(game.uuid)
   )
-  filteredGames.forEach((game: any) => {
+  filteredGames.forEach((game: ChessGame) => {
     let userResult: number | null = null
     if (game.white.username.toLowerCase() === state.username.toLowerCase()) {
       userResult = mapResult(game.white.result)
@@ -293,10 +304,9 @@ function animateEloDiff(
   callback: (value: number) => void
 ) {
   const start = performance.now()
-  const duration = 700 // Animation duration (ms)
 
   function animate(time: number) {
-    const timeFraction = Math.min((time - start) / duration, 1)
+    const timeFraction = Math.min((time - start) / ANIMATION_DURATION, 1)
     const ratingDiff = Math.floor(
       initialDiff + timeFraction * (newEloDiff - initialDiff)
     )
@@ -323,15 +333,15 @@ async function resetStats() {
   state.modes = JSON.parse(JSON.stringify(STATE_DEFAULT.modes))
   state.processedGameUUIDs = []
   state.scriptStartTime = Math.floor(Date.now() / 1000)
-  await updateUi()
+  await init()
   isResetting.value = false
   saveState()
 }
 
-function handleError(err: any) {
-  if (err.name === "AbortError") {
+function handleError(err: unknown) {
+  if (err instanceof Error && err.name === "AbortError") {
     console.error("Fetch timeout:", err)
-  } else if (err.message.includes("HTTP Error: 404")) {
+  } else if (err instanceof Error && err.message.includes("HTTP Error: 404")) {
     showError(
       state.username === ""
         ? "Enter your chess.com username"
@@ -346,9 +356,9 @@ function handleError(err: any) {
 function onUsernameChange() {
   showSuccess(`Set username to ${state.username}`)
   for (const mode in state.modes) {
-    state.modes[mode as "rapid" | "blitz" | "bullet"].lastRatingDiff = 0
-    state.modes[mode as "rapid" | "blitz" | "bullet"].initialRating = null
-    state.modes[mode as "rapid" | "blitz" | "bullet"].score = {
+    state.modes[mode].lastRatingDiff = 0
+    state.modes[mode].initialRating = null
+    state.modes[mode].score = {
       wins: 0,
       losses: 0,
       draws: 0
@@ -356,36 +366,85 @@ function onUsernameChange() {
   }
   state.processedGameUUIDs = []
   state.scriptStartTime = Math.floor(Date.now() / 1000)
-  updateUi()
+  init()
   saveState()
 }
 
 // Start periodic UI updates
 function startInterval() {
-  intervalId = window.setInterval(() => {
-    if (!state.username || state.editMode) return
+  intervalId = setInterval(() => {
+    // Skip if username is empty, in edit mode or currently updating
+    if (!state.username || state.editMode || isRunning) return
+
     updateUi()
-  }, 6000)
+  }, INTERVAL_MS)
 }
 
-onMounted(() => {
-  loadState()
-  ;(async () => {
-    const ratings = await fetchAllCurrentRatings(state.username)
-    if (ratings) {
-      for (const mode in state.modes) {
-        if (
-          !state.modes[mode as "rapid" | "blitz" | "bullet"].initialRating ||
-          state.resetOnRestart
-        ) {
-          state.modes[mode as "rapid" | "blitz" | "bullet"].initialRating =
-            ratings[mode as "rapid" | "blitz" | "bullet"]
-        }
+async function fetchAndUpdateRatings() {
+  const ratings = await fetchAllCurrentRatings(state.username)
+  if (ratings) {
+    for (const mode in state.modes) {
+      if (!state.modes[mode].initialRating || state.resetOnRestart) {
+        state.modes[mode].initialRating = ratings[mode]
       }
     }
+  }
+  isRunning = true
+  await updateUi()
+  isRunning = false
+}
+
+async function init(loadSettings = false) {
+  if (loadSettings) {
+    loadState()
+  }
+  // Setze den Edit-Modus zurück
+  state.editMode = false
+
+  // Wenn Reset on Restart aktiv ist, werden Statistiken zurückgesetzt
+  if (state.resetOnRestart) {
+    state.scriptStartTime = Math.floor(Date.now() / 1000)
+    state.processedGameUUIDs = []
+    for (const mode in state.modes) {
+      state.modes[mode].lastRatingDiff = 0
+      state.modes[mode].score = { wins: 0, losses: 0, draws: 0 }
+    }
+  }
+
+  // Initiale Bewertungen laden und setzen
+  const ratings = await fetchAllCurrentRatings(state.username)
+  if (ratings) {
+    for (const mode in state.modes) {
+      if (!state.modes[mode].initialRating || state.resetOnRestart) {
+        state.modes[mode].initialRating = ratings[mode]
+      }
+    }
+  }
+
+  // UI-Update durchführen und Zustand speichern
+  await updateUi()
+  saveState()
+}
+
+// watch for changes in game mode
+watch(
+  () => state.gameMode,
+  (newMode) => {
+    showSuccess(`Game mode changed to ${newMode}`)
     updateUi()
-  })()
+  }
+)
+
+onMounted(() => {
+  init(true)
   startInterval()
+})
+
+// Cleanup interval on component unmount
+onBeforeUnmount(() => {
+  if (intervalId) {
+    clearInterval(intervalId)
+  }
 })
 </script>
 
