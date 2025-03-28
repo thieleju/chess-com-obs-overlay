@@ -9,35 +9,6 @@ export const REPO_MAINTAINER = "thieleju"
 export const INTERVAL_MS = 6000
 export const FETCH_HARD_TIMEOUT = INTERVAL_MS - 100
 
-export interface Score {
-  wins: number
-  losses: number
-  draws: number
-}
-
-export interface ModeState {
-  score: Score
-  initialRating: number | null
-  lastRatingDiff: number
-}
-
-export interface State {
-  username: string
-  gameMode: "rapid" | "blitz" | "bullet"
-  showEloDiff: boolean
-  editMode: boolean
-  resetOnRestart: boolean
-  scriptStartTime: number
-  processedGameUUIDs: string[]
-  scoreFormat: "wld" | "wdl"
-  centerElements: boolean
-  modes: {
-    rapid: ModeState
-    blitz: ModeState
-    bullet: ModeState
-  }
-}
-
 export const STATE_DEFAULT: State = {
   username: "",
   gameMode: "rapid",

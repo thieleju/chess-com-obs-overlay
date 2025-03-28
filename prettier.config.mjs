@@ -6,7 +6,7 @@ const config = {
   proseWrap: "never",
   useTabs: false,
   endOfLine: "lf",
-  printWidth: 80
-}
+  printWidth: 80,
+};
 
-export default config
+export default config;
