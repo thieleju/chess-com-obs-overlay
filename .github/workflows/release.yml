@@ -41,7 +41,7 @@ jobs:
       #   run: pnpm test
 
       - name: Build minified release version
-        run: pnpm run build
+        run: pnpm run build-only
 
       - name: Rename index.html
         run: |
