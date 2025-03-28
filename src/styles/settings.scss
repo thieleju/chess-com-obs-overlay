@@ -8,3 +8,8 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+html,
+body {
+  overflow: hidden;
+}

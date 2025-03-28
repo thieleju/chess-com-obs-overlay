@@ -36,34 +36,38 @@
     <!-- Edit Mode Section -->
     <v-card v-show="state.editMode" class="dont-toggle">
       <v-row class="pa-0 ma-0">
-        <v-col cols="12">
+        <v-col cols="12" sm="4">
           <v-btn-toggle
             v-model="state.gameMode"
             variant="outlined"
             dense
-            mandatory
             @change="showSuccess('Game mode changed to ')"
           >
             <v-btn value="rapid" hide-details> Rapid </v-btn>
             <v-btn value="blitz" hide-details> Blitz </v-btn>
             <v-btn value="bullet" hide-details> Bullet </v-btn>
           </v-btn-toggle>
+        </v-col>
 
+        <v-col cols="12" sm="4">
           <v-btn-toggle
             v-model="state.scoreFormat"
             variant="outlined"
-            dense
-            mandatory
             class="mx-2"
           >
             <v-btn value="wld"> W/L/D </v-btn>
             <v-btn value="wdl"> W/D/L </v-btn>
           </v-btn-toggle>
+        </v-col>
 
+        <v-col cols="12" sm="4">
           <v-btn
             variant="outlined"
             color="secondary"
+            size="large"
+            block
             :disabled="isResetting"
+            prepend-icon="mdi-refresh"
             @click="resetStats"
           >
             Reset Stats
@@ -82,7 +86,7 @@
             @change="onUsernameChange"
           />
         </v-col>
-        <v-col>
+        <v-col cols="12" sm="4">
           <v-select
             v-model="state.fontFamily"
             :items="fontFamilies"
@@ -92,7 +96,7 @@
             label="Font Family"
           />
         </v-col>
-        <v-col>
+        <v-col cols="12" sm="4">
           <v-number-input
             :model-value="state.lineHeight"
             :min="0.8"
@@ -110,7 +114,7 @@
           >
           </v-number-input>
         </v-col>
-        <v-col>
+        <v-col cols="12" sm="4">
           <v-number-input
             :model-value="state.wordSpacing"
             :min="-20"
@@ -129,20 +133,24 @@
         </v-col>
       </v-row>
 
-      <v-row class="pa-0 ma-0">
-        <v-col cols="12">
+      <v-row class="pa-0 ma-0" align="center">
+        <v-col cols="12" sm="4">
           <v-checkbox
             v-model="state.resetOnRestart"
             dense
             label="Reset Score on Restart"
             hide-details
           />
+        </v-col>
+        <v-col cols="12" sm="4">
           <v-checkbox
             v-model="state.showEloDiff"
             dense
             label="Show Elo ±"
             hide-details
           />
+        </v-col>
+        <v-col cols="12" sm="4">
           <v-checkbox
             v-model="state.centerElements"
             dense
@@ -405,6 +413,13 @@ function toggleEditMode(event: MouseEvent) {
   const target = event.target as HTMLElement
   if (target.closest(".dont-toggle")) return
   state.editMode = !state.editMode
+
+  // hide scrollbar globally if edit mode is false
+  if (!state.editMode) {
+    document.body.style.overflow = "hidden"
+  } else {
+    document.body.style.overflow = "auto"
+  }
 }
 
 // Reset stats and update UI
