@@ -9,6 +9,9 @@ import "@mdi/font/css/materialdesignicons.css"
 import "vuetify/styles"
 import { aliases, mdi } from "vuetify/iconsets/mdi"
 
+// Labs components
+import { VNumberInput } from "vuetify/labs/VNumberInput"
+
 // Composables
 import { createVuetify } from "vuetify"
 
@@ -21,5 +24,8 @@ export default createVuetify({
     defaultSet: "mdi",
     aliases,
     sets: { mdi }
+  },
+  components: {
+    VNumberInput
   }
 })
