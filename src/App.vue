@@ -113,7 +113,7 @@
         <v-col>
           <v-number-input
             :model-value="state.wordSpacing"
-            :min="-10"
+            :min="-20"
             :max="20"
             :step="1"
             label="Word Spacing"
@@ -232,14 +232,13 @@ const ratingDiffColor = computed(() => {
 
 const textStyle = computed(() => ({
   fontFamily: state.fontFamily,
-  fontSize: `${state.fontSize}rem`,
   // height of the text elements
   lineHeight: state.lineHeight,
   // space between words
   wordSpacing: `${state.wordSpacing}px`
 }))
 
-let intervalId: number | undefined
+let intervalId: ReturnType<typeof setInterval> | undefined
 let isRunning: boolean = false
 
 // Show success message for 1 second
@@ -251,7 +250,7 @@ function showSuccess(msg: string) {
   successMessageTimeoutId.value = setTimeout(() => {
     successMessage.value = ""
     successMessageTimeoutId.value = null
-  }, 1000)
+  }, 1000) as unknown as number
 }
 
 function showError(msg: string) {
@@ -461,20 +460,6 @@ function startInterval() {
   }, INTERVAL_MS)
 }
 
-async function fetchAndUpdateRatings() {
-  const ratings = await fetchAllCurrentRatings(state.username)
-  if (ratings) {
-    for (const mode in state.modes) {
-      if (!state.modes[mode].initialRating || state.resetOnRestart) {
-        state.modes[mode].initialRating = ratings[mode]
-      }
-    }
-  }
-  isRunning = true
-  await updateUi()
-  isRunning = false
-}
-
 async function init(loadSettings = false) {
   try {
     if (loadSettings) {
@@ -501,8 +486,9 @@ async function init(loadSettings = false) {
         }
       }
     }
-
+    isRunning = true
     await updateUi()
+    isRunning = false
 
     errorMessage.value = ""
   } catch (error: unknown) {
@@ -513,7 +499,7 @@ async function init(loadSettings = false) {
 // watch for changes in state and save to localStorage
 watch(
   () => state,
-  (newState) => saveState(),
+  () => saveState(),
   { deep: true }
 )
 // watch for changes in game mode show success message
