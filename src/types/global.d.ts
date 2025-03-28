@@ -1,128 +1,131 @@
-export {};
+export {}
 
 declare global {
   interface ChessGame {
-    url: string;
-    pgn: string;
-    time_control: string;
-    end_time: number;
-    rated: boolean;
+    url: string
+    pgn: string
+    time_control: string
+    end_time: number
+    rated: boolean
     accuracies: {
-      white: number;
-      black: number;
-    };
-    tcn: string;
-    uuid: string;
-    initial_setup: string;
-    fen: string;
-    start_time: number;
-    time_class: string;
-    rules: string;
-    white: Player;
-    black: Player;
-    eco: string;
+      white: number
+      black: number
+    }
+    tcn: string
+    uuid: string
+    initial_setup: string
+    fen: string
+    start_time: number
+    time_class: string
+    rules: string
+    white: Player
+    black: Player
+    eco: string
   }
 
   interface Player {
-    rating: number;
-    result: string;
-    "@id": string;
-    username: string;
-    uuid: string;
+    rating: number
+    result: string
+    "@id": string
+    username: string
+    uuid: string
   }
 
   interface ChessGamesResponse {
-    games: ChessGame[];
+    games: ChessGame[]
   }
 
   interface Score {
-    wins: number;
-    losses: number;
-    draws: number;
+    wins: number
+    losses: number
+    draws: number
   }
 
   interface Ratings {
-    rapid: number;
-    blitz: number;
-    bullet: number;
+    rapid: number
+    blitz: number
+    bullet: number
   }
 
   interface ModeState {
-    score: Score;
-    initialRating: number | null;
-    lastRatingDiff: number;
+    score: Score
+    initialRating: number | null
+    lastRatingDiff: number
   }
 
   interface State {
-    username: string;
-    gameMode: "rapid" | "blitz" | "bullet";
-    showEloDiff: boolean;
-    editMode: boolean;
-    resetOnRestart: boolean;
-    scriptStartTime: number;
-    processedGameUUIDs: string[];
-    scoreFormat: "wld" | "wdl";
-    centerElements: boolean;
+    username: string
+    gameMode: "rapid" | "blitz" | "bullet"
+    showEloDiff: boolean
+    editMode: boolean
+    resetOnRestart: boolean
+    scriptStartTime: number
+    processedGameUUIDs: string[]
+    scoreFormat: "wld" | "wdl"
+    centerElements: boolean
+    fontFamily: string
+    lineHeight: number
+    wordSpacing: number
     modes: {
-      rapid: ModeState;
-      blitz: ModeState;
-      bullet: ModeState;
-    };
+      rapid: ModeState
+      blitz: ModeState
+      bullet: ModeState
+    }
   }
 
   interface ChessStats {
-    chess_daily?: ChessMode;
-    chess960_daily?: ChessMode;
-    chess_rapid?: ChessMode;
-    chess_bullet?: ChessMode;
-    chess_blitz?: ChessMode;
-    fide?: number;
-    tactics?: TacticsStats;
-    puzzle_rush?: PuzzleRushStats;
+    chess_daily?: ChessMode
+    chess960_daily?: ChessMode
+    chess_rapid?: ChessMode
+    chess_bullet?: ChessMode
+    chess_blitz?: ChessMode
+    fide?: number
+    tactics?: TacticsStats
+    puzzle_rush?: PuzzleRushStats
   }
 
   interface ChessMode {
-    last: RatingInfo;
-    best: BestRatingInfo;
-    record: GameRecord;
+    last: RatingInfo
+    best: BestRatingInfo
+    record: GameRecord
   }
 
   interface RatingInfo {
-    rating: number;
-    date: number;
-    rd: number;
+    rating: number
+    date: number
+    rd: number
   }
 
   interface BestRatingInfo {
-    rating: number;
-    date: number;
-    game: string;
+    rating: number
+    date: number
+    game: string
   }
 
   interface GameRecord {
-    win: number;
-    loss: number;
-    draw: number;
-    time_per_move?: number;
-    timeout_percent?: number;
+    win: number
+    loss: number
+    draw: number
+    time_per_move?: number
+    timeout_percent?: number
   }
 
   interface TacticsStats {
-    highest: RatingDate;
-    lowest: RatingDate;
+    highest: RatingDate
+    lowest: RatingDate
   }
 
   interface RatingDate {
-    rating: number;
-    date: number;
+    rating: number
+    date: number
   }
 
   interface PuzzleRushStats {
-    best: PuzzleRushBest;
+    best: PuzzleRushBest
   }
 
   interface PuzzleRushBest {
-    total_attempts: number;
-    score: number;
+    total_attempts: number
+    score: number
   }
 }
