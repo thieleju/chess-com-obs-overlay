@@ -19,6 +19,9 @@ export const STATE_DEFAULT: State = {
   processedGameUUIDs: [],
   scoreFormat: "wld",
   centerElements: false,
+  fontFamily: "Roboto",
+  lineHeight: 1.5,
+  wordSpacing: 0,
   modes: {
     rapid: {
       score: { wins: 0, losses: 0, draws: 0 },
