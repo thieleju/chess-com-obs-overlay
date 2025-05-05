@@ -4,9 +4,9 @@
     <v-snackbar
       v-model="snackbar"
       :color="snackbarMessageColor"
-      variant="flat"
       :location="state.centerElements ? 'top' : 'top'"
       :timeout="snackbarMessageColor === 'error' ? 3000 : 1000"
+      variant="flat"
       rounded
     >
       {{ snackbarMessage }}
@@ -56,7 +56,7 @@
             mandatory
             @change="
               (event) =>
-                showSnackbarMessage('success', 'Game mode changed to ' + event)
+                showSnackbarMessage('success', 'Game mode set to ' + event)
             "
           >
             <v-btn value="rapid" hide-details> Rapid </v-btn>
@@ -444,7 +444,7 @@ function handleError(err: unknown) {
 
 // Handle username change event
 function onUsernameChange() {
-  showSnackbarMessage("success", `Username changed to ${state.username}`)
+  showSnackbarMessage("success", `Username set to ${state.username}`)
   for (const mode in state.modes) {
     state.modes[mode].lastRatingDiff = 0
     state.modes[mode].initialRating = null
@@ -513,7 +513,7 @@ watch(
 watch(
   () => state.gameMode,
   (newMode) => {
-    showSnackbarMessage("success", `Game mode changed to ${newMode}`)
+    showSnackbarMessage("success", `Game mode set to ${newMode}`)
     updateUi()
   }
 )
@@ -521,7 +521,7 @@ watch(
 watch(
   () => state.scoreFormat,
   (newFormat) => {
-    showSnackbarMessage("success", `Score format changed to ${newFormat}`)
+    showSnackbarMessage("success", `Score format set to ${newFormat}`)
   }
 )
 
