@@ -1,3 +1,23 @@
+# [1.6.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.5.1...v1.6.0) (2025-05-05)
+
+
+### Bug Fixes
+
+* Add semantic-release dependencies ([5668048](https://github.com/thieleju/chess-com-obs-overlay/commit/56680489b0bfb726990cf1274a03e3aea41feeaa))
+* fix typescript errors ([44e18a2](https://github.com/thieleju/chess-com-obs-overlay/commit/44e18a25f4cf8a45820c7682e2e70c6411600c9a))
+* Fix ui scale and release workflow ([92bc5a1](https://github.com/thieleju/chess-com-obs-overlay/commit/92bc5a12fe43be44734a43bc0f00481836d1f0c4))
+* Hide scrollbar globally ([79291c8](https://github.com/thieleju/chess-com-obs-overlay/commit/79291c801b87be8aad80c6aaca6f8df41a3f82ea))
+
+
+### Features
+
+* Add font georgia ([9b763b5](https://github.com/thieleju/chess-com-obs-overlay/commit/9b763b521b49a17af348a5a103af6f467ed72ef5))
+* Add options to change typography ([527f969](https://github.com/thieleju/chess-com-obs-overlay/commit/527f9690b0a1d0609caf90946225e863b9e04a18))
+* Add types ([cd269fa](https://github.com/thieleju/chess-com-obs-overlay/commit/cd269fa3e95af4d7051031653709189f4d25e11f))
+* Switch from v-alert to v-snackbar ([6e94c85](https://github.com/thieleju/chess-com-obs-overlay/commit/6e94c856b4ad5001041ae8202aa56e91a8f51466))
+* Switching to vue3 ([845e320](https://github.com/thieleju/chess-com-obs-overlay/commit/845e3209ad0290c4ade194cb3c16eac057495187))
+* Update readme and setup.gif ([79c80b4](https://github.com/thieleju/chess-com-obs-overlay/commit/79c80b424a870bf02de8002cf334ccc448be6d93))
+
 ## [1.5.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.5.0...v1.5.1) (2025-03-10)
 
 
