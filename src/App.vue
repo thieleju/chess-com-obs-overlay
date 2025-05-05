@@ -143,6 +143,7 @@
             hide-details
             label="Chess.com Username"
             variant="outlined"
+            :rules="[(v) => !!v || 'Username is required']"
             @change="onUsernameChange"
           />
         </v-col>
