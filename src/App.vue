@@ -539,6 +539,11 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+html,
+body {
+  overflow: hidden;
+}
+
 .wld {
   font-size: 100px;
 }
