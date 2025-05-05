@@ -1,7 +1,19 @@
 <template>
   <v-container fluid class="pa-0 ma-0" @click="toggleEditMode">
+    <!-- Snackbar for success and error messages -->
+    <v-snackbar
+      v-model="snackbar"
+      :color="snackbarMessageColor"
+      variant="flat"
+      :location="state.centerElements ? 'top' : 'top'"
+      :timeout="snackbarMessageColor === 'error' ? 3000 : 1000"
+      rounded
+    >
+      {{ snackbarMessage }}
+    </v-snackbar>
+
     <!-- WLD Score Display -->
-    <v-row class="pa-0 ma-0">
+    <v-row class="pa-0 ma-0 pointer">
       <v-col cols="12" class="pa-0 ma-0">
         <div
           :class="{
@@ -16,7 +28,7 @@
     </v-row>
 
     <!-- Elo Difference Display -->
-    <v-row v-if="state.showEloDiff" class="pa-0 ma-0">
+    <v-row v-if="state.showEloDiff" class="pa-0 ma-0 pointer">
       <v-col cols="12" class="pa-0 ma-0">
         <div
           :class="{
@@ -41,7 +53,11 @@
             v-model="state.gameMode"
             variant="outlined"
             dense
-            @change="showSuccess('Game mode changed to ')"
+            mandatory
+            @change="
+              (event) =>
+                showSnackbarMessage('success', 'Game mode changed to ' + event)
+            "
           >
             <v-btn value="rapid" hide-details> Rapid </v-btn>
             <v-btn value="blitz" hide-details> Blitz </v-btn>
@@ -111,8 +127,7 @@
                 state.lineHeight = value
               }
             "
-          >
-          </v-number-input>
+          />
         </v-col>
         <v-col cols="12" sm="4">
           <v-number-input
@@ -128,8 +143,7 @@
                 state.wordSpacing = value
               }
             "
-          >
-          </v-number-input>
+          />
         </v-col>
       </v-row>
 
@@ -160,30 +174,6 @@
         </v-col>
       </v-row>
     </v-card>
-
-    <!-- Alert Messages -->
-    <v-row class="pa-0 ma-0">
-      <v-col cols="12">
-        <v-alert
-          v-if="errorMessage"
-          dense
-          hide-details
-          variant="outlined"
-          type="error"
-        >
-          {{ errorMessage }}
-        </v-alert>
-        <v-alert
-          v-if="successMessage"
-          dense
-          hide-details
-          variant="outlined"
-          type="success"
-        >
-          {{ successMessage }}
-        </v-alert>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
@@ -202,11 +192,11 @@ import { fetchGames, fetchAllCurrentRatings } from "./lib/api"
 
 // Reactive state from default settings
 const state = reactive<State>({ ...STATE_DEFAULT })
-const errorMessage = ref("")
-const successMessage = ref("")
-const successMessageTimeoutId = ref<number | null>(null)
 const isResetting = ref(false)
 const currentRatingDiff = ref(0)
+const snackbar = ref(false)
+const snackbarMessage = ref("")
+const snackbarMessageColor = ref("success")
 
 const fontFamilies = [
   "Roboto",
@@ -249,20 +239,20 @@ const textStyle = computed(() => ({
 let intervalId: ReturnType<typeof setInterval> | undefined
 let isRunning: boolean = false
 
-// Show success message for 1 second
-function showSuccess(msg: string) {
-  if (successMessageTimeoutId.value !== null) {
-    clearTimeout(successMessageTimeoutId.value)
-  }
-  successMessage.value = msg
-  successMessageTimeoutId.value = setTimeout(() => {
-    successMessage.value = ""
-    successMessageTimeoutId.value = null
-  }, 1000) as unknown as number
+// Show success message
+function showSnackbarMessage(type: "success" | "error", msg: string) {
+  snackbarMessage.value = ""
+  snackbarMessageColor.value = type
+  snackbar.value = true
+  snackbarMessage.value = msg
 }
 
+// Show error message
 function showError(msg: string) {
-  errorMessage.value = msg
+  snackbarMessage.value = ""
+  snackbarMessageColor.value = "error"
+  snackbar.value = true
+  snackbarMessage.value = msg
 }
 
 // Update UI by fetching game data and ratings
@@ -290,6 +280,9 @@ async function updateUi() {
         }
       )
       state.modes[state.gameMode].lastRatingDiff = ratingDiff
+    } else {
+      // If the rating difference is the same, just set it directly to handle mode changes
+      currentRatingDiff.value = ratingDiff
     }
   } catch (error: unknown) {
     handleError(error)
@@ -361,7 +354,6 @@ function mapResult(result: string): number {
 // Save current state to localStorage
 function saveState() {
   localStorage.setItem("state", JSON.stringify(state))
-  console.log("Saved state:", state)
 }
 
 // Load state from localStorage if available
@@ -379,6 +371,7 @@ function loadState() {
     if (!parsed.fontFamily) parsed.fontFamily = "Roboto"
     if (!parsed.lineHeight) parsed.lineHeight = 1.5
     if (!parsed.wordSpacing) parsed.wordSpacing = 0
+    if (!parsed.gameMode) parsed.gameMode = "rapid"
 
     Object.assign(state, parsed)
 
@@ -425,10 +418,11 @@ function toggleEditMode(event: MouseEvent) {
 // Reset stats and update UI
 async function resetStats() {
   isResetting.value = true
-  showSuccess("Resetting stats...")
+  showSnackbarMessage("success", "Resetting stats...")
   state.modes = JSON.parse(JSON.stringify(STATE_DEFAULT.modes))
   state.processedGameUUIDs = []
   state.scriptStartTime = Math.floor(Date.now() / 1000)
+  currentRatingDiff.value = 0
   await init()
   isResetting.value = false
 }
@@ -450,7 +444,7 @@ function handleError(err: unknown) {
 
 // Handle username change event
 function onUsernameChange() {
-  showSuccess(`Set username to ${state.username}`)
+  showSnackbarMessage("success", `Username changed to ${state.username}`)
   for (const mode in state.modes) {
     state.modes[mode].lastRatingDiff = 0
     state.modes[mode].initialRating = null
@@ -504,8 +498,6 @@ async function init(loadSettings = false) {
     isRunning = true
     await updateUi()
     isRunning = false
-
-    errorMessage.value = ""
   } catch (error: unknown) {
     handleError(error)
   }
@@ -521,7 +513,7 @@ watch(
 watch(
   () => state.gameMode,
   (newMode) => {
-    showSuccess(`Game mode changed to ${newMode}`)
+    showSnackbarMessage("success", `Game mode changed to ${newMode}`)
     updateUi()
   }
 )
@@ -529,7 +521,7 @@ watch(
 watch(
   () => state.scoreFormat,
   (newFormat) => {
-    showSuccess(`Score format changed to ${newFormat}`)
+    showSnackbarMessage("success", `Score format changed to ${newFormat}`)
   }
 )
 
@@ -553,5 +545,9 @@ onBeforeUnmount(() => {
 
 .rating {
   font-size: 50px;
+}
+
+.pointer {
+  cursor: pointer;
 }
 </style>
