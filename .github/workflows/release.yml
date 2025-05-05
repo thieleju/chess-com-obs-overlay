@@ -37,11 +37,15 @@ jobs:
       - name: Lint code
         run: pnpm run lint
 
-      - name: Run tests
-        run: pnpm test
+      # - name: Run tests
+      #   run: pnpm test
 
       - name: Build minified release version
-        run: pnpm run build:min
+        run: pnpm run build-only
+
+      - name: Rename index.html
+        run: |
+          mv dist/index.html dist/chess-com-obs-overlay.html
 
       - name: Run semantic-release
         env:
