@@ -1,5 +1,9 @@
 <template>
-  <v-container fluid class="pa-0 ma-0" @click="toggleEditMode">
+  <v-container
+    fluid
+    class="pa-0 ma-0"
+    @click="toggleEditMode"
+  >
     <!-- Snackbar for success and error messages -->
     <v-snackbar
       v-model="snackbar"
@@ -14,7 +18,10 @@
 
     <!-- WLD Score Display -->
     <v-row class="pa-0 ma-0 pointer">
-      <v-col cols="12" class="pa-0 ma-0">
+      <v-col
+        cols="12"
+        class="pa-0 ma-0"
+      >
         <div
           :class="{
             'text-center': state.centerElements,
@@ -28,8 +35,14 @@
     </v-row>
 
     <!-- Elo Difference Display -->
-    <v-row v-if="state.showEloDiff" class="pa-0 ma-0 pointer">
-      <v-col cols="12" class="pa-0 ma-0">
+    <v-row
+      v-if="state.showEloDiff"
+      class="pa-0 ma-0 pointer"
+    >
+      <v-col
+        cols="12"
+        class="pa-0 ma-0"
+      >
         <div
           :class="{
             'text-center': state.centerElements,
@@ -46,9 +59,15 @@
     </v-row>
 
     <!-- Edit Mode Section -->
-    <v-card v-show="state.editMode" class="dont-toggle">
+    <v-card
+      v-show="state.editMode"
+      class="dont-toggle"
+    >
       <v-row class="pa-0 ma-0">
-        <v-col cols="12" sm="4">
+        <v-col
+          cols="12"
+          sm="4"
+        >
           <v-btn-toggle
             v-model="state.gameMode"
             variant="outlined"
@@ -59,24 +78,49 @@
                 showSnackbarMessage('success', 'Game mode set to ' + event)
             "
           >
-            <v-btn value="rapid" hide-details> Rapid </v-btn>
-            <v-btn value="blitz" hide-details> Blitz </v-btn>
-            <v-btn value="bullet" hide-details> Bullet </v-btn>
+            <v-btn
+              value="rapid"
+              hide-details
+            >
+              Rapid
+            </v-btn>
+            <v-btn
+              value="blitz"
+              hide-details
+            >
+              Blitz
+            </v-btn>
+            <v-btn
+              value="bullet"
+              hide-details
+            >
+              Bullet
+            </v-btn>
           </v-btn-toggle>
         </v-col>
 
-        <v-col cols="12" sm="4">
+        <v-col
+          cols="12"
+          sm="4"
+        >
           <v-btn-toggle
             v-model="state.scoreFormat"
             variant="outlined"
             class="mx-2"
           >
-            <v-btn value="wld"> W/L/D </v-btn>
-            <v-btn value="wdl"> W/D/L </v-btn>
+            <v-btn value="wld">
+              W/L/D
+            </v-btn>
+            <v-btn value="wdl">
+              W/D/L
+            </v-btn>
           </v-btn-toggle>
         </v-col>
 
-        <v-col cols="12" sm="4">
+        <v-col
+          cols="12"
+          sm="4"
+        >
           <v-btn
             variant="outlined"
             color="secondary"
@@ -102,7 +146,10 @@
             @change="onUsernameChange"
           />
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col
+          cols="12"
+          sm="4"
+        >
           <v-select
             v-model="state.fontFamily"
             :items="fontFamilies"
@@ -112,7 +159,10 @@
             label="Font Family"
           />
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col
+          cols="12"
+          sm="4"
+        >
           <v-number-input
             :model-value="state.lineHeight"
             :min="0.8"
@@ -129,7 +179,10 @@
             "
           />
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col
+          cols="12"
+          sm="4"
+        >
           <v-number-input
             :model-value="state.wordSpacing"
             :min="-20"
@@ -147,8 +200,14 @@
         </v-col>
       </v-row>
 
-      <v-row class="pa-0 ma-0" align="center">
-        <v-col cols="12" sm="4">
+      <v-row
+        class="pa-0 ma-0"
+        align="center"
+      >
+        <v-col
+          cols="12"
+          sm="4"
+        >
           <v-checkbox
             v-model="state.resetOnRestart"
             dense
@@ -156,7 +215,10 @@
             hide-details
           />
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col
+          cols="12"
+          sm="4"
+        >
           <v-checkbox
             v-model="state.showEloDiff"
             dense
@@ -164,7 +226,10 @@
             hide-details
           />
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col
+          cols="12"
+          sm="4"
+        >
           <v-checkbox
             v-model="state.centerElements"
             dense
