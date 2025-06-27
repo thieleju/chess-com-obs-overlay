@@ -52,11 +52,11 @@ importers:
         specifier: ^3.4.2
         version: 3.4.2
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.13.14
+        specifier: ^24.0.6
+        version: 24.0.6
       '@vitejs/plugin-vue':
         specifier: ^5.1.4
-        version: 5.2.3(vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))
+        version: 5.2.3(vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))
       '@vue/eslint-config-typescript':
         specifier: ^14.1.3
         version: 14.5.0(eslint-plugin-vue@9.33.0(eslint@9.23.0))(eslint@9.23.0)(typescript@5.6.3)
@@ -86,19 +86,19 @@ importers:
         version: 5.6.3
       unplugin-fonts:
         specifier: ^1.1.1
-        version: 1.3.1(vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8))
+        version: 1.3.1(vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8))
       unplugin-vue-components:
         specifier: ^0.27.2
         version: 0.27.5(@babel/parser@7.27.0)(rollup@4.43.0)(vue@3.5.13(typescript@5.6.3))
       vite:
         specifier: ^6.3.5
-        version: 6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8)
+        version: 6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8)
       vite-plugin-singlefile:
         specifier: ^2.2.0
-        version: 2.2.0(rollup@4.43.0)(vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8))
+        version: 2.2.0(rollup@4.43.0)(vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8))
       vite-plugin-vuetify:
         specifier: ^2.0.3
-        version: 2.1.0(vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))(vuetify@3.7.19)
+        version: 2.1.0(vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))(vuetify@3.7.19)
       vue-tsc:
         specifier: ^2.2.10
         version: 2.2.10(typescript@5.6.3)
@@ -602,8 +602,8 @@ packages:
   '@types/luxon@3.4.2':
     resolution: {integrity: sha512-TifLZlFudklWlMBfhubvgqTXRzLDI5pCbGa4P8a3wPyUQSW+1xQ5eDsreP9DWHX3tjq1ke96uYG/nwundroWcA==}
 
-  '@types/node@22.13.14':
-    resolution: {integrity: sha512-Zs/Ollc1SJ8nKUAgc7ivOEdIBM8JAKgrqqUYi2J997JuKO7/tpQC+WCetQ1sypiKCQWHdvdg9wBNpUPEWZae7w==}
+  '@types/node@24.0.6':
+    resolution: {integrity: sha512-ZOyn+gOs749xU7ovp+Ibj0g1o3dFRqsfPnT22C2t5JzcRvgsEDpGawPbCISGKLudJk9Y0wiu9sYd6kUh0pc9TA==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -2277,8 +2277,8 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  undici-types@6.20.0:
-    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
+  undici-types@7.8.0:
+    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
   unicode-emoji-modifier-base@1.0.0:
     resolution: {integrity: sha512-yLSH4py7oFH3oG/9K+XWrz1pSi3dfUrWEnInbxMfArOfc1+33BlGPQtLsOYwvdMy11AwUBetYuaRxSPqgkq+8g==}
@@ -2939,9 +2939,9 @@ snapshots:
 
   '@types/luxon@3.4.2': {}
 
-  '@types/node@22.13.14':
+  '@types/node@24.0.6':
     dependencies:
-      undici-types: 6.20.0
+      undici-types: 7.8.0
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -3022,9 +3022,9 @@ snapshots:
       '@typescript-eslint/types': 8.28.0
       eslint-visitor-keys: 4.2.0
 
-  '@vitejs/plugin-vue@5.2.3(vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))':
+  '@vitejs/plugin-vue@5.2.3(vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))':
     dependencies:
-      vite: 6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8)
+      vite: 6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8)
       vue: 3.5.13(typescript@5.6.3)
 
   '@volar/language-core@2.4.13':
@@ -4572,7 +4572,7 @@ snapshots:
   uglify-js@3.19.3:
     optional: true
 
-  undici-types@6.20.0: {}
+  undici-types@7.8.0: {}
 
   unicode-emoji-modifier-base@1.0.0: {}
 
@@ -4588,11 +4588,11 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  unplugin-fonts@1.3.1(vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8)):
+  unplugin-fonts@1.3.1(vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8)):
     dependencies:
       fast-glob: 3.3.3
       unplugin: 2.0.0-beta.1
-      vite: 6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8)
+      vite: 6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8)
 
   unplugin-vue-components@0.27.5(@babel/parser@7.27.0)(rollup@4.43.0)(vue@3.5.13(typescript@5.6.3)):
     dependencies:
@@ -4640,24 +4640,24 @@ snapshots:
 
   varint@6.0.0: {}
 
-  vite-plugin-singlefile@2.2.0(rollup@4.43.0)(vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8)):
+  vite-plugin-singlefile@2.2.0(rollup@4.43.0)(vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8)):
     dependencies:
       micromatch: 4.0.8
       rollup: 4.43.0
-      vite: 6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8)
+      vite: 6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8)
 
-  vite-plugin-vuetify@2.1.0(vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))(vuetify@3.7.19):
+  vite-plugin-vuetify@2.1.0(vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))(vuetify@3.7.19):
     dependencies:
       '@vuetify/loader-shared': 2.1.0(vue@3.5.13(typescript@5.6.3))(vuetify@3.7.19)
       debug: 4.4.0
       upath: 2.0.1
-      vite: 6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8)
+      vite: 6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8)
       vue: 3.5.13(typescript@5.6.3)
       vuetify: 3.7.19(typescript@5.6.3)(vite-plugin-vuetify@2.1.0)(vue@3.5.13(typescript@5.6.3))
     transitivePeerDependencies:
       - supports-color
 
-  vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8):
+  vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8):
     dependencies:
       esbuild: 0.25.5
       fdir: 6.4.6(picomatch@4.0.2)
@@ -4666,7 +4666,7 @@ snapshots:
       rollup: 4.43.0
       tinyglobby: 0.2.14
     optionalDependencies:
-      '@types/node': 22.13.14
+      '@types/node': 24.0.6
       fsevents: 2.3.3
       sass: 1.77.8
       sass-embedded: 1.86.0
@@ -4720,7 +4720,7 @@ snapshots:
       vue: 3.5.13(typescript@5.6.3)
     optionalDependencies:
       typescript: 5.6.3
-      vite-plugin-vuetify: 2.1.0(vite@6.3.5(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))(vuetify@3.7.19)
+      vite-plugin-vuetify: 2.1.0(vite@6.3.5(@types/node@24.0.6)(sass-embedded@1.86.0)(sass@1.77.8))(vue@3.5.13(typescript@5.6.3))(vuetify@3.7.19)
 
   webpack-virtual-modules@0.6.2: {}
 
