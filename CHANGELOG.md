@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.7.0...v1.7.1) (2025-07-07)
+
+
+### Bug Fixes
+
+* Fix issue when fontStyles not being loaded from state ([b537136](https://github.com/thieleju/chess-com-obs-overlay/commit/b537136ba4b672ee937d981d3309a3dff25e0468))
+
 # [1.7.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.6.0...v1.7.0) (2025-07-07)
 
 
