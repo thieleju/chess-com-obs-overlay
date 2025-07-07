@@ -8,8 +8,5 @@
       "path": "./tsconfig.app.json"
     }
   ],
-  "include": [
-    "src",
-    "src/types/global.d.ts"
-  ]
+  "include": ["src", "src/types/global.d.ts"]
 }
