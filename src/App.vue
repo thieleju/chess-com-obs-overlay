@@ -116,7 +116,6 @@
             </v-btn>
           </v-btn-toggle>
         </v-col>
-
         <v-col
           cols="12"
           sm="4"
@@ -160,9 +159,10 @@
             label="Font Family"
           />
         </v-col>
+
         <v-col
           cols="12"
-          sm="4"
+          sm="3"
         >
           <v-number-input
             :model-value="state.lineHeight"
@@ -182,7 +182,7 @@
         </v-col>
         <v-col
           cols="12"
-          sm="4"
+          sm="3"
         >
           <v-number-input
             :model-value="state.wordSpacing"
@@ -198,6 +198,30 @@
               }
             "
           />
+        </v-col>
+
+        <v-col
+          cols="12"
+          sm="2"
+        >
+          <v-btn-toggle
+            v-model="activeStyles"
+            variant="outlined"
+            dense
+            multiple
+            class="d-flex justify-start"
+          >
+            <v-btn
+              value="bold"
+              icon="mdi-format-bold"
+              size="x-large"
+            />
+            <v-btn
+              value="italic"
+              icon="mdi-format-italic"
+              size="x-large"
+            />
+          </v-btn-toggle>
         </v-col>
       </v-row>
 
@@ -263,6 +287,7 @@ const currentRatingDiff = ref(0)
 const snackbar = ref(false)
 const snackbarMessage = ref("")
 const snackbarMessageColor = ref("success")
+const activeStyles = ref<string[]>([])
 
 const fontFamilies = [
   "Roboto",
@@ -299,7 +324,11 @@ const textStyle = computed(() => ({
   // height of the text elements
   lineHeight: state.lineHeight,
   // space between words
-  wordSpacing: `${state.wordSpacing}px`
+  wordSpacing: `${state.wordSpacing}px`,
+  // font weight
+  fontWeight: activeStyles.value.includes("bold") ? "bold" : "normal",
+  // font style
+  fontStyle: activeStyles.value.includes("italic") ? "italic" : "normal"
 }))
 
 let intervalId: ReturnType<typeof setInterval> | undefined
@@ -438,6 +467,8 @@ function loadState() {
     if (!parsed.lineHeight) parsed.lineHeight = 1.5
     if (!parsed.wordSpacing) parsed.wordSpacing = 0
     if (!parsed.gameMode) parsed.gameMode = "rapid"
+    if (!parsed.fontWeight) parsed.fontWeight = "normal"
+    if (!parsed.fontStyle) parsed.fontStyle = "normal"
 
     Object.assign(state, parsed)
 
