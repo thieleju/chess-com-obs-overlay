@@ -326,9 +326,9 @@ const textStyle = computed(() => ({
   // space between words
   wordSpacing: `${state.wordSpacing}px`,
   // font weight
-  fontWeight: activeStyles.value.includes("bold") ? "bold" : "normal",
+  fontWeight: state.fontWeight,
   // font style
-  fontStyle: activeStyles.value.includes("italic") ? "italic" : "normal"
+  fontStyle: state.fontStyle,
 }))
 
 let intervalId: ReturnType<typeof setInterval> | undefined
@@ -469,6 +469,13 @@ function loadState() {
     if (!parsed.gameMode) parsed.gameMode = "rapid"
     if (!parsed.fontWeight) parsed.fontWeight = "normal"
     if (!parsed.fontStyle) parsed.fontStyle = "normal"
+
+    // set font styles
+    const stylesArray = [].concat(
+      parsed.fontWeight === "bold" ? "bold" : "",
+      parsed.fontStyle === "italic" ? "italic" : ""
+    ).filter(Boolean)
+    activeStyles.value = stylesArray
 
     Object.assign(state, parsed)
 
@@ -619,6 +626,14 @@ watch(
   () => state.scoreFormat,
   (newFormat) => {
     showSnackbarMessage("success", `Score format set to ${newFormat}`)
+  }
+)
+// watch for changes in active styles and update state
+watch(
+  () => activeStyles.value,
+  (newStyles) => {
+    state.fontWeight = newStyles.includes("bold") ? "bold" : "normal"
+    state.fontStyle = newStyles.includes("italic") ? "italic" : "normal"
   }
 )
 
