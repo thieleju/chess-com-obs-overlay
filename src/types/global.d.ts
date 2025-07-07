@@ -66,6 +66,7 @@ declare global {
     fontFamily: string
     lineHeight: number
     wordSpacing: number
+    fontWeight: number
     modes: {
       rapid: ModeState
       blitz: ModeState

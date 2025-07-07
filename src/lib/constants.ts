@@ -20,6 +20,7 @@ export const STATE_DEFAULT: State = {
   scoreFormat: "wld",
   centerElements: false,
   fontFamily: "Roboto",
+  fontWeight: 400,
   lineHeight: 1.5,
   wordSpacing: 0,
   modes: {

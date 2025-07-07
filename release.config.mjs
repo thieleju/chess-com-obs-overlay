@@ -1,5 +1,3 @@
- 
-
 export default {
   branches: ["main"],
   plugins: [
