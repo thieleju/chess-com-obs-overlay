@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.6.0...v1.7.0) (2025-07-07)
+
+
+### Features
+
+* Add bold and italics style settings ([f66ce7e](https://github.com/thieleju/chess-com-obs-overlay/commit/f66ce7e6e150bfd0e55c8a67d932dea97d8ded02))
+
 # [1.6.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.5.1...v1.6.0) (2025-05-05)
 
 
