@@ -25,7 +25,8 @@
         <div
           :class="{
             'text-center': state.centerElements,
-            wld: true
+            wld: true,
+            'text-outline': true
           }"
           :style="textStyle"
         >
@@ -46,7 +47,8 @@
         <div
           :class="{
             'text-center': state.centerElements,
-            rating: true
+            rating: true,
+            'text-outline': true
           }"
           :style="textStyle"
         >
@@ -392,22 +394,37 @@ function getScore(games: ChessGame[]): Score {
     losses: modeScore.losses,
     draws: modeScore.draws
   }
+  console.log("initial score:", newScore)
+  console.log("init games", games)
   if (!games || games.length === 0) return newScore
+  console.log("raw games:", games)
+
+  // Set scriptStartId if not set yet (use the newest game ID)
+  if (state.scriptStartId === null && games.length > 0) {
+    state.scriptStartId = games[0].id // games are sorted desc, so first is newest
+    console.log("scriptStartId set to:", state.scriptStartId)
+  }
+
+  // Filter games based on gameTimeClass, scriptStartId and processedGameUUIDs
   const filteredGames = games.filter(
-    (game: ChessGame) =>
-      game.end_time > state.scriptStartTime &&
-      game.time_class === state.gameMode &&
-      !state.processedGameUUIDs.includes(game.uuid)
+    (game: ChessGame) => {
+      return game.gameTimeClass === state.gameMode &&
+        game.id > (state.scriptStartId || 0) &&
+        !state.processedGameUUIDs.includes(game.id.toString())
+    }
   )
+  console.log("filtered games:", filteredGames)
+  
   filteredGames.forEach((game: ChessGame) => {
     let userResult: number | null = null
-    if (game.white.username.toLowerCase() === state.username.toLowerCase()) {
-      userResult = mapResult(game.white.result)
-    } else if (
-      game.black.username.toLowerCase() === state.username.toLowerCase()
-    ) {
-      userResult = mapResult(game.black.result)
+    
+    // Check which user is the current user and get their result
+    if (game.user1.username.toLowerCase() === state.username.toLowerCase()) {
+      userResult = game.user1Result
+    } else if (game.user2.username.toLowerCase() === state.username.toLowerCase()) {
+      userResult = game.user2Result
     }
+    
     if (userResult === 1) {
       newScore.wins += 1
     } else if (userResult === 0) {
@@ -415,35 +432,14 @@ function getScore(games: ChessGame[]): Score {
     } else if (userResult === 0.5) {
       newScore.draws += 1
     }
-    if (!state.processedGameUUIDs.includes(game.uuid)) {
-      state.processedGameUUIDs.push(game.uuid)
+    
+    // Add game ID to processed games
+    if (!state.processedGameUUIDs.includes(game.id.toString())) {
+      state.processedGameUUIDs.push(game.id.toString())
     }
   })
+  console.log("new score:", newScore)
   return newScore
-}
-
-// Map game result to score value
-function mapResult(result: string): number {
-  switch (result) {
-    case "win":
-      return 1
-    case "lose":
-    case "checkmated":
-    case "resigned":
-    case "timeout":
-    case "abandoned":
-    case "bughousepartnerlose":
-      return 0
-    case "agreed":
-    case "timevsinsufficient":
-    case "repetition":
-    case "stalemate":
-    case "insufficient":
-    case "50move":
-      return 0.5
-    default:
-      throw new Error("Invalid result: " + result)
-  }
 }
 
 // Save current state to localStorage
@@ -469,6 +465,7 @@ function loadState() {
     if (!parsed.gameMode) parsed.gameMode = "rapid"
     if (!parsed.fontWeight) parsed.fontWeight = "normal"
     if (!parsed.fontStyle) parsed.fontStyle = "normal"
+    if (parsed.scriptStartId === undefined) parsed.scriptStartId = null
 
     // set font styles
     const stylesArray = [].concat(
@@ -525,7 +522,7 @@ async function resetStats() {
   showSnackbarMessage("success", "Resetting stats...")
   state.modes = JSON.parse(JSON.stringify(STATE_DEFAULT.modes))
   state.processedGameUUIDs = []
-  state.scriptStartTime = Math.floor(Date.now() / 1000)
+  state.scriptStartId = null
   currentRatingDiff.value = 0
   await init()
   isResetting.value = false
@@ -559,7 +556,7 @@ function onUsernameChange() {
     }
   }
   state.processedGameUUIDs = []
-  state.scriptStartTime = Math.floor(Date.now() / 1000)
+  state.scriptStartId = null
   init()
 }
 
@@ -583,7 +580,7 @@ async function init(loadSettings = false) {
     // Reset stats of all modes if reset on restart is enabled
     if (state.resetOnRestart) {
       // Only reset script start time if reset on restart is enabled to catch up on games played during the downtime
-      state.scriptStartTime = Math.floor(Date.now() / 1000)
+      state.scriptStartId = null
       state.processedGameUUIDs = []
       for (const mode in state.modes) {
         state.modes[mode].lastRatingDiff = 0
@@ -666,5 +663,9 @@ body {
 
 .pointer {
   cursor: pointer;
+}
+
+.text-outline {
+  text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.6);
 }
 </style>

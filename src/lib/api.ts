@@ -1,6 +1,7 @@
 import { DateTime } from "luxon"
 import {
   CHESS_API_URL,
+  CHESS_COM_PLAYER_API_URL,
   FETCH_HARD_TIMEOUT,
   CHESS_COM_TIMEZONE,
   REPO_URL,
@@ -35,8 +36,8 @@ export async function fetchData<T>(url: string, username: string): Promise<T> {
 export async function fetchAllCurrentRatings(
   username: string
 ): Promise<Ratings> {
-  const url = `${CHESS_API_URL}/${username.toLowerCase()}/stats`
-  const data = await fetchData<ChessStats>(url, username)
+  const statsUrl = `${CHESS_COM_PLAYER_API_URL}/${username.toLowerCase()}/stats`
+  const data = await fetchData<PlayerStatsResponse>(statsUrl, username)
   return {
     rapid: data?.chess_rapid?.last?.rating || 0,
     blitz: data?.chess_blitz?.last?.rating || 0,
@@ -44,23 +45,10 @@ export async function fetchAllCurrentRatings(
   }
 }
 
-export function getGamesUrl(username: string): string {
-  const date = DateTime.local().setZone(CHESS_COM_TIMEZONE)
-  const month = date.month.toString().padStart(2, "0")
-  return `${CHESS_API_URL}/${username.toLowerCase()}/games/${
-    date.year
-  }/${month}`
-}
-
-export async function fetchGames(username: string): Promise<ChessGame[] | []> {
-  const url = getGamesUrl(username)
+export async function fetchGames(username: string): Promise<ChessGame[]> {
+  const url = `${CHESS_API_URL}?locale=en&username=${username.toLowerCase()}&page=1&rated=rated&timeSort=desc&location=live`
   const data = await fetchData<ChessGamesResponse>(url, username)
-  // Sort games by end_time in descending order
-  return (
-    data?.games?.sort(
-      (a: ChessGame, b: ChessGame) => b.end_time - a.end_time
-    ) || []
-  )
+  return data?.data || []
 }
 
 function getUserAgent(username: string): string {

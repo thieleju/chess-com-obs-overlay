@@ -3,7 +3,9 @@ export const COLOR_RED = "#f44336"
 export const COLOR_WHITE = "#ffffff"
 export const ANIMATION_DURATION = 700
 export const CHESS_COM_TIMEZONE = "America/Los_Angeles"
-export const CHESS_API_URL = "https://api.chess.com/pub/player"
+// Using CORS proxy for final HTML file
+export const CHESS_API_URL = 'https://corsproxy.io/?https://www.chess.com/callback/games/extended-archive'
+export const CHESS_COM_PLAYER_API_URL = 'https://corsproxy.io/?https://api.chess.com/pub/player'
 export const REPO_URL = "https://github.com/thieleju/chess-com-obs-overlay"
 export const REPO_MAINTAINER = "thieleju"
 export const INTERVAL_MS = 6000
@@ -15,7 +17,7 @@ export const STATE_DEFAULT: State = {
   showEloDiff: true,
   editMode: false,
   resetOnRestart: true,
-  scriptStartTime: Math.floor(Date.now() / 1000),
+  scriptStartId: null,
   processedGameUUIDs: [],
   scoreFormat: "wld",
   centerElements: false,
