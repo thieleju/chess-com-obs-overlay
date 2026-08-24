@@ -1,9 +1,7 @@
-import { DateTime } from "luxon"
 import {
   CHESS_API_URL,
   CHESS_COM_PLAYER_API_URL,
   FETCH_HARD_TIMEOUT,
-  CHESS_COM_TIMEZONE,
   REPO_URL,
   REPO_MAINTAINER
 } from "./constants"
