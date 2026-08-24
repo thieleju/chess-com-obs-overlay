@@ -1,5 +1,7 @@
 import {
   CHESS_API_URL,
+  CHESS_API_LOCALE,
+  CHESS_API_DEFAULT_PAGE,
   CHESS_COM_PLAYER_API_URL,
   FETCH_HARD_TIMEOUT,
   REPO_URL,
@@ -44,9 +46,20 @@ export async function fetchAllCurrentRatings(
 }
 
 export async function fetchGames(username: string): Promise<ChessGame[]> {
-  const url = `${CHESS_API_URL}?locale=en&username=${username.toLowerCase()}&page=1&rated=rated&timeSort=desc&location=live`
+  const url = buildExtendedArchiveUrl(username)
   const data = await fetchData<ChessGamesResponse>(url, username)
   return data?.data || []
+}
+
+function buildExtendedArchiveUrl(username: string): string {
+  // Only include the minimal parameters; further filtering is done client-side
+  const params = new URLSearchParams({
+    locale: CHESS_API_LOCALE,
+    username: username.toLowerCase(),
+    page: CHESS_API_DEFAULT_PAGE.toString()
+  })
+
+  return `${CHESS_API_URL}?${params.toString()}`
 }
 
 function getUserAgent(username: string): string {

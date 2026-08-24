@@ -2,8 +2,7 @@
 
 OBS Overlay for Win/Lose/Draw and rating ±
 
-> [!WARNING]
-> The chess.com api is pretty inconsistent and sometimes games will only show up after a short delay.
+> [!WARNING] The chess.com api is pretty inconsistent and sometimes games will only show up after a short delay.
 
 ## ✨ Features
 
@@ -23,9 +22,33 @@ OBS Overlay for Win/Lose/Draw and rating ±
 
 ![Setup](./assets/setup.gif)
 
-> [!NOTE]
-> The stats will not update if the options menu is still open. You can open/close the options menu by clicking the stats as shown in the gif above.
+> [!NOTE] The stats will not update if the options menu is still open. You can open/close the options menu by clicking the stats as shown in the gif above.
 
 ## 📃 Chess.com API reference
 
 - Chess.com API Documentation [here](https://www.chess.com/news/view/published-data-api) (It's pretty much discontinued sadly)
+
+## 🛡️ CORS in OBS (Important)
+
+When this project is used as a bundled `html` file in OBS, browser CORS rules still apply. Direct calls to `https://www.chess.com/*` and `https://api.chess.com/*` can fail depending on endpoint headers.
+
+### Proxy setup used in this repo
+
+This repo is configured to always use the Cloudflare Worker proxy in both `pnpm dev` and production builds.
+
+Current proxy base URL:
+
+- `https://obs-overlay.thieleju.workers.dev`
+
+A ready-to-deploy worker source is included at `proxy/cloudflare-worker.js`.
+
+Build command:
+
+```bash
+pnpm run build-only
+```
+
+The overlay calls:
+
+- `https://obs-overlay.thieleju.workers.dev/callback/games/extended-archive`
+- `https://obs-overlay.thieleju.workers.dev/pub/player/:username/stats`

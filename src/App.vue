@@ -57,7 +57,7 @@
             dense
             mandatory
             @change="
-              (event) =>
+              (event: State['gameMode']) =>
                 showSnackbarMessage('success', 'Game mode set to ' + event)
             "
           >
@@ -213,7 +213,11 @@ const currentRatingDiff = ref(0)
 const snackbar = ref(false)
 const snackbarMessage = ref("")
 const snackbarMessageColor = ref("success")
-const activeStyles = ref<string[]>([])
+const activeStyles = ref<string[]>([
+  ...(state.fontWeight === "bold" ? ["bold"] : []),
+  ...(state.fontStyle === "italic" ? ["italic"] : [])
+])
+const modeKeys: State["gameMode"][] = ["rapid", "blitz", "bullet"]
 
 const fontFamilies = [
   "Roboto",
@@ -332,7 +336,7 @@ function getScore(games: ChessGame[]): Score {
   // Filter games based on gameTimeClass, scriptStartId and processedGameUUIDs
   const filteredGames = games.filter((game: ChessGame) => {
     return (
-      game.gameTimeClass === state.gameMode &&
+      matchesGameMode(game, state.gameMode) &&
       game.id > (state.scriptStartId || 0) &&
       !state.processedGameUUIDs.includes(game.id.toString())
     )
@@ -368,6 +372,48 @@ function getScore(games: ChessGame[]): Score {
   return newScore
 }
 
+function matchesGameMode(game: ChessGame, mode: State["gameMode"]): boolean {
+  if (game.isVsComputer || game.isVsCoach || game.daysPerTurn > 0) return false
+
+  const normalizedTimeClass = game.gameTimeClass?.toLowerCase()
+  if (mode === "bullet") {
+    if (
+      normalizedTimeClass === "bullet" ||
+      normalizedTimeClass === "lightning"
+    ) {
+      return true
+    }
+  }
+  if (mode === "blitz" && normalizedTimeClass === "blitz") {
+    return true
+  }
+  if (mode === "rapid") {
+    if (
+      normalizedTimeClass === "rapid" ||
+      normalizedTimeClass === "classical"
+    ) {
+      return true
+    }
+  }
+
+  const baseSeconds = getBaseSeconds(game)
+  if (baseSeconds <= 0) return false
+
+  if (baseSeconds < 180) return mode === "bullet"
+  if (baseSeconds < 600) return mode === "blitz"
+  return mode === "rapid"
+}
+
+function getBaseSeconds(game: ChessGame): number {
+  if (game.timeControl?.baseMs) {
+    return Math.floor(game.timeControl.baseMs / 1000)
+  }
+  if (game.baseTime1 > 0) {
+    return Math.floor(game.baseTime1 / 10)
+  }
+  return 0
+}
+
 // Save current state to localStorage
 function saveState() {
   localStorage.setItem("state", JSON.stringify(state))
@@ -385,21 +431,18 @@ function loadState() {
     if (!Array.isArray(parsed.processedGameUUIDs))
       parsed.processedGameUUIDs = []
     if (!parsed.scoreFormat) parsed.scoreFormat = "wld"
-    if (!parsed.fontFamily) parsed.fontFamily = "Roboto"
-    if (!parsed.lineHeight) parsed.lineHeight = 1.5
-    if (!parsed.wordSpacing) parsed.wordSpacing = 0
+    if (!parsed.fontFamily) parsed.fontFamily = "Nunito"
+    if (!parsed.lineHeight) parsed.lineHeight = 1.0
+    if (!parsed.wordSpacing && parsed.wordSpacing !== 0) parsed.wordSpacing = -9
     if (!parsed.gameMode) parsed.gameMode = "rapid"
-    if (!parsed.fontWeight) parsed.fontWeight = "normal"
+    if (!parsed.fontWeight) parsed.fontWeight = "bold"
     if (!parsed.fontStyle) parsed.fontStyle = "normal"
     if (parsed.scriptStartId === undefined) parsed.scriptStartId = null
 
     // set font styles
-    const stylesArray = []
-      .concat(
-        parsed.fontWeight === "bold" ? "bold" : "",
-        parsed.fontStyle === "italic" ? "italic" : ""
-      )
-      .filter(Boolean)
+    const stylesArray: string[] = []
+    if (parsed.fontWeight === "bold") stylesArray.push("bold")
+    if (parsed.fontStyle === "italic") stylesArray.push("italic")
     activeStyles.value = stylesArray
 
     Object.assign(state, parsed)
@@ -474,7 +517,7 @@ function handleError(err: unknown) {
 // Handle username change event
 function onUsernameChange() {
   showSnackbarMessage("success", `Username set to ${state.username}`)
-  for (const mode in state.modes) {
+  for (const mode of modeKeys) {
     state.modes[mode].lastRatingDiff = 0
     state.modes[mode].initialRating = null
     state.modes[mode].score = {
@@ -510,7 +553,7 @@ async function init(loadSettings = false) {
       // Only reset script start time if reset on restart is enabled to catch up on games played during the downtime
       state.scriptStartId = null
       state.processedGameUUIDs = []
-      for (const mode in state.modes) {
+      for (const mode of modeKeys) {
         state.modes[mode].lastRatingDiff = 0
         state.modes[mode].score = { wins: 0, losses: 0, draws: 0 }
       }
@@ -518,7 +561,7 @@ async function init(loadSettings = false) {
 
     const ratings = await fetchAllCurrentRatings(state.username)
     if (ratings) {
-      for (const mode in state.modes) {
+      for (const mode of modeKeys) {
         if (!state.modes[mode].initialRating || state.resetOnRestart) {
           state.modes[mode].initialRating = ratings[mode]
         }

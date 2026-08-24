@@ -2,10 +2,15 @@ export const COLOR_GREEN = "#4caf50"
 export const COLOR_RED = "#f44336"
 export const COLOR_WHITE = "#ffffff"
 export const ANIMATION_DURATION = 700
-export const CHESS_COM_TIMEZONE = "America/Los_Angeles"
-// Using CORS proxy for final HTML file
-export const CHESS_API_URL = 'https://corsproxy.io/?https://www.chess.com/callback/games/extended-archive'
-export const CHESS_COM_PLAYER_API_URL = 'https://corsproxy.io/?https://api.chess.com/pub/player'
+const CHESS_PROXY_BASE_URL = "https://obs-overlay.thieleju.workers.dev"
+const CALLBACK_API_BASE = `${CHESS_PROXY_BASE_URL}/callback`
+const PUB_API_BASE = `${CHESS_PROXY_BASE_URL}/pub`
+
+export const CHESS_API_URL = `${CALLBACK_API_BASE}/games/extended-archive`
+export const CHESS_COM_PLAYER_API_URL = `${PUB_API_BASE}/player`
+export const CHESS_API_LOCALE = "en_US"
+export const CHESS_API_DEFAULT_PAGE = 1
+
 export const REPO_URL = "https://github.com/thieleju/chess-com-obs-overlay"
 export const REPO_MAINTAINER = "thieleju"
 export const INTERVAL_MS = 6000
@@ -21,11 +26,11 @@ export const STATE_DEFAULT: State = {
   processedGameUUIDs: [],
   scoreFormat: "wld",
   centerElements: false,
-  fontFamily: "Roboto",
-  fontWeight: "normal", 
+  fontFamily: "Nunito",
+  fontWeight: "bold",
   fontStyle: "normal",
-  lineHeight: 1.5,
-  wordSpacing: 0,
+  lineHeight: 1.0,
+  wordSpacing: -9,
   modes: {
     rapid: {
       score: { wins: 0, losses: 0, draws: 0 },

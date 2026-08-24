@@ -1,5 +1,13 @@
 export {}
 
+import type { Component } from "vue"
+
+declare module "@vue/runtime-core" {
+  interface GlobalComponents {
+    [name: string]: Component
+  }
+}
+
 declare global {
   interface ChessGame {
     id: number
@@ -22,8 +30,12 @@ declare global {
     }
     user1: NewPlayer
     user2: NewPlayer
+    timeControl?: {
+      baseMs: number
+    }
     isLive: boolean
     isVsComputer: boolean
+    isVsCoach: boolean
     uuid: string
     fen: string
     moves: number
@@ -44,7 +56,15 @@ declare global {
     countryId: number
     countryName: string
     membershipLevel: number
-    flair: string | null
+    flair: {
+      id: string
+      images: {
+        png: string
+        svg: string
+        lottie: string
+      }
+      description: string
+    } | null
   }
 
   interface Player {

@@ -5,6 +5,7 @@ node_modules
 # local env files
 .env.local
 .env.*.local
+.env.production
 
 # Log files
 npm-debug.log*
@@ -20,3 +21,9 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Generated build outputs from TypeScript/Vite
+*.tsbuildinfo
+vite.config.mjs
+vite.config.d.mts
+src/main.d.ts

@@ -1,0 +1,13 @@
+export declare const COLOR_GREEN: string
+export declare const COLOR_RED: string
+export declare const COLOR_WHITE: string
+export declare const ANIMATION_DURATION: number
+export declare const CHESS_API_URL: string
+export declare const CHESS_COM_PLAYER_API_URL: string
+export declare const CHESS_API_LOCALE: string
+export declare const CHESS_API_DEFAULT_PAGE: number
+export declare const REPO_URL: string
+export declare const REPO_MAINTAINER: string
+export declare const INTERVAL_MS: number
+export declare const FETCH_HARD_TIMEOUT: number
+export declare const STATE_DEFAULT: State
