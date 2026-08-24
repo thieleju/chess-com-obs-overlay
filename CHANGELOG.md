@@ -1,3 +1,17 @@
+# [1.8.0](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.7.1...v1.8.0) (2026-08-24)
+
+
+### Bug Fixes
+
+* add packages to pnpm-workspace.yaml ([4368da6](https://github.com/thieleju/chess-com-obs-overlay/commit/4368da6abbdd1d24aee432653b0cb9a53a44131c))
+
+
+### Features
+
+* switch to new chess.com endpoint and use cf workers ([121aa61](https://github.com/thieleju/chess-com-obs-overlay/commit/121aa61319293cfabaebd925af851e4464426c7b))
+* Update game fetching logic and enhance player statistics handling ([3d5f1f8](https://github.com/thieleju/chess-com-obs-overlay/commit/3d5f1f8abeb1e4e7135a29fe0a974a8e69cb28c8))
+* update packages ([58c2b97](https://github.com/thieleju/chess-com-obs-overlay/commit/58c2b975237b3a18fba4a791a726637bcf64e079))
+
 ## [1.7.1](https://github.com/thieleju/chess-com-obs-overlay/compare/v1.7.0...v1.7.1) (2025-07-07)
 
 
