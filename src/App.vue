@@ -1,9 +1,5 @@
 <template>
-  <v-container
-    fluid
-    class="pa-0 ma-0"
-    @click="toggleEditMode"
-  >
+  <v-container fluid class="pa-0 ma-0" @click="toggleEditMode">
     <!-- Snackbar for success and error messages -->
     <v-snackbar
       v-model="snackbar"
@@ -18,10 +14,7 @@
 
     <!-- WLD Score Display -->
     <v-row class="pa-0 ma-0 pointer">
-      <v-col
-        cols="12"
-        class="pa-0 ma-0"
-      >
+      <v-col cols="12" class="pa-0 ma-0">
         <div
           :class="{
             'text-center': state.centerElements,
@@ -36,14 +29,8 @@
     </v-row>
 
     <!-- Elo Difference Display -->
-    <v-row
-      v-if="state.showEloDiff"
-      class="pa-0 ma-0 pointer"
-    >
-      <v-col
-        cols="12"
-        class="pa-0 ma-0"
-      >
+    <v-row v-if="state.showEloDiff" class="pa-0 ma-0 pointer">
+      <v-col cols="12" class="pa-0 ma-0">
         <div
           :class="{
             'text-center': state.centerElements,
@@ -61,15 +48,9 @@
     </v-row>
 
     <!-- Edit Mode Section -->
-    <v-card
-      v-show="state.editMode"
-      class="dont-toggle"
-    >
-      <v-row class="pa-0 ma-0">
-        <v-col
-          cols="12"
-          sm="4"
-        >
+    <v-card v-show="state.editMode" class="dont-toggle pa-4 ma-4">
+      <v-row class="mb-4">
+        <v-col cols="12" sm="4">
           <v-btn-toggle
             v-model="state.gameMode"
             variant="outlined"
@@ -80,48 +61,23 @@
                 showSnackbarMessage('success', 'Game mode set to ' + event)
             "
           >
-            <v-btn
-              value="rapid"
-              hide-details
-            >
-              Rapid
-            </v-btn>
-            <v-btn
-              value="blitz"
-              hide-details
-            >
-              Blitz
-            </v-btn>
-            <v-btn
-              value="bullet"
-              hide-details
-            >
-              Bullet
-            </v-btn>
+            <v-btn value="rapid" hide-details> Rapid </v-btn>
+            <v-btn value="blitz" hide-details> Blitz </v-btn>
+            <v-btn value="bullet" hide-details> Bullet </v-btn>
           </v-btn-toggle>
         </v-col>
 
-        <v-col
-          cols="12"
-          sm="4"
-        >
+        <v-col cols="12" sm="4">
           <v-btn-toggle
             v-model="state.scoreFormat"
             variant="outlined"
             class="mx-2"
           >
-            <v-btn value="wld">
-              W/L/D
-            </v-btn>
-            <v-btn value="wdl">
-              W/D/L
-            </v-btn>
+            <v-btn value="wld"> W/L/D </v-btn>
+            <v-btn value="wdl"> W/D/L </v-btn>
           </v-btn-toggle>
         </v-col>
-        <v-col
-          cols="12"
-          sm="4"
-        >
+        <v-col cols="12" sm="4">
           <v-btn
             variant="outlined"
             color="secondary"
@@ -148,10 +104,7 @@
             @change="onUsernameChange"
           />
         </v-col>
-        <v-col
-          cols="12"
-          sm="4"
-        >
+        <v-col cols="12" sm="4">
           <v-select
             v-model="state.fontFamily"
             :items="fontFamilies"
@@ -162,10 +115,7 @@
           />
         </v-col>
 
-        <v-col
-          cols="12"
-          sm="3"
-        >
+        <v-col cols="12" sm="3">
           <v-number-input
             :model-value="state.lineHeight"
             :min="0.8"
@@ -182,10 +132,7 @@
             "
           />
         </v-col>
-        <v-col
-          cols="12"
-          sm="3"
-        >
+        <v-col cols="12" sm="3">
           <v-number-input
             :model-value="state.wordSpacing"
             :min="-20"
@@ -202,10 +149,7 @@
           />
         </v-col>
 
-        <v-col
-          cols="12"
-          sm="2"
-        >
+        <v-col cols="12" sm="2">
           <v-btn-toggle
             v-model="activeStyles"
             variant="outlined"
@@ -213,28 +157,14 @@
             multiple
             class="d-flex justify-start"
           >
-            <v-btn
-              value="bold"
-              icon="mdi-format-bold"
-              size="x-large"
-            />
-            <v-btn
-              value="italic"
-              icon="mdi-format-italic"
-              size="x-large"
-            />
+            <v-btn value="bold" icon="mdi-format-bold" size="x-large" />
+            <v-btn value="italic" icon="mdi-format-italic" size="x-large" />
           </v-btn-toggle>
         </v-col>
       </v-row>
 
-      <v-row
-        class="pa-0 ma-0"
-        align="center"
-      >
-        <v-col
-          cols="12"
-          sm="4"
-        >
+      <v-row class="pa-0 ma-0" align="center">
+        <v-col cols="12" sm="4">
           <v-checkbox
             v-model="state.resetOnRestart"
             dense
@@ -242,10 +172,7 @@
             hide-details
           />
         </v-col>
-        <v-col
-          cols="12"
-          sm="4"
-        >
+        <v-col cols="12" sm="4">
           <v-checkbox
             v-model="state.showEloDiff"
             dense
@@ -253,10 +180,7 @@
             hide-details
           />
         </v-col>
-        <v-col
-          cols="12"
-          sm="4"
-        >
+        <v-col cols="12" sm="4">
           <v-checkbox
             v-model="state.centerElements"
             dense
@@ -330,7 +254,7 @@ const textStyle = computed(() => ({
   // font weight
   fontWeight: state.fontWeight,
   // font style
-  fontStyle: state.fontStyle,
+  fontStyle: state.fontStyle
 }))
 
 let intervalId: ReturnType<typeof setInterval> | undefined
@@ -406,25 +330,27 @@ function getScore(games: ChessGame[]): Score {
   }
 
   // Filter games based on gameTimeClass, scriptStartId and processedGameUUIDs
-  const filteredGames = games.filter(
-    (game: ChessGame) => {
-      return game.gameTimeClass === state.gameMode &&
-        game.id > (state.scriptStartId || 0) &&
-        !state.processedGameUUIDs.includes(game.id.toString())
-    }
-  )
+  const filteredGames = games.filter((game: ChessGame) => {
+    return (
+      game.gameTimeClass === state.gameMode &&
+      game.id > (state.scriptStartId || 0) &&
+      !state.processedGameUUIDs.includes(game.id.toString())
+    )
+  })
   console.log("filtered games:", filteredGames)
-  
+
   filteredGames.forEach((game: ChessGame) => {
     let userResult: number | null = null
-    
+
     // Check which user is the current user and get their result
     if (game.user1.username.toLowerCase() === state.username.toLowerCase()) {
       userResult = game.user1Result
-    } else if (game.user2.username.toLowerCase() === state.username.toLowerCase()) {
+    } else if (
+      game.user2.username.toLowerCase() === state.username.toLowerCase()
+    ) {
       userResult = game.user2Result
     }
-    
+
     if (userResult === 1) {
       newScore.wins += 1
     } else if (userResult === 0) {
@@ -432,7 +358,7 @@ function getScore(games: ChessGame[]): Score {
     } else if (userResult === 0.5) {
       newScore.draws += 1
     }
-    
+
     // Add game ID to processed games
     if (!state.processedGameUUIDs.includes(game.id.toString())) {
       state.processedGameUUIDs.push(game.id.toString())
@@ -468,10 +394,12 @@ function loadState() {
     if (parsed.scriptStartId === undefined) parsed.scriptStartId = null
 
     // set font styles
-    const stylesArray = [].concat(
-      parsed.fontWeight === "bold" ? "bold" : "",
-      parsed.fontStyle === "italic" ? "italic" : ""
-    ).filter(Boolean)
+    const stylesArray = []
+      .concat(
+        parsed.fontWeight === "bold" ? "bold" : "",
+        parsed.fontStyle === "italic" ? "italic" : ""
+      )
+      .filter(Boolean)
     activeStyles.value = stylesArray
 
     Object.assign(state, parsed)
@@ -666,6 +594,6 @@ body {
 }
 
 .text-outline {
-  text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.6);
+  text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.6);
 }
 </style>
